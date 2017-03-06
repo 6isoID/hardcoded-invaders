@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+	
+	<definition name="aPage">
+        <put-attribute name="commonHeadImports" value="/WEB-INF/chunks/common/headImports.jsp"/>
+        <put-attribute name="currentHeadImports" value = ""/>
+        <put-attribute name="title" value="" />
+    </definition>
+    
+    <definition name="outerPage" extends="aPage" template="/WEB-INF/chunks/templates/outerPageLayout.jsp">
+        <put-attribute name="tournamentCountdown" value="/WEB-INF/chunks/common/countdown.jsp"/>
+        <put-attribute name="header" value="/WEB-INF/chunks/common/header.jsp" />
+        <put-attribute name="content" value="" />
+    </definition>
+    
+    <definition name="innerPage" extends="aPage" template="/WEB-INF/chunks/templates/innerPageLayout.jsp">
+        <put-attribute name="menu" value="/WEB-INF/chunks/common/menu.jsp"/>
+        <put-attribute name="header" value="/WEB-INF/chunks/common/header.jsp" />
+        <put-attribute name="content" value="" />
+    </definition>
+    
+    <definition name="welcomePage" extends="outerPage">
+        <put-attribute name="title" value="titles.welcomePage.title"/>
+        <put-attribute name="currentHeadImports" value="/WEB-INF/chunks/welcomePage/headImports.jsp" />
+        <put-attribute name="content" value="/WEB-INF/chunks/welcomePage/page.jsp" />
+    </definition>
+    
+    <definition name="infoPage" extends="outerPage">
+        <put-attribute name="title" value="titles.infoPage.title"/>
+        <put-attribute name="currentHeadImports" value="/WEB-INF/chunks/infoPage/headImports.jsp" />
+        <put-attribute name="content" value="/WEB-INF/chunks/infoPage/page.jsp" />
+    </definition>
+    
+    <definition name="registrationPage" extends="outerPage">
+        <put-attribute name="title" value="titles.registrationPage.title"/>
+        <put-attribute name="currentHeadImports" value="/WEB-INF/chunks/registrationPage/headImports.jsp" />
+        <put-attribute name="content" value="/WEB-INF/chunks/registrationPage/page.jsp" />
+    </definition>
+    
+    <definition name="trainingPage" extends="innerPage">
+        <put-attribute name="title" value="titles.trainingPage.title"/>
+        <put-attribute name="currentHeadImports" value="/WEB-INF/chunks/trainingPage/headImports.jsp" />
+        <put-attribute name="content" value="/WEB-INF/chunks/trainingPage/page.jsp" />
+    </definition>
+    
+    <definition name="battlePage" extends="innerPage">
+        <put-attribute name="title" value="titles.battlePage.title"/>
+        <put-attribute name="currentHeadImports" value="/WEB-INF/chunks/battlePage/headImports.jsp" />
+        <put-attribute name="content" value="/WEB-INF/chunks/battlePage/page.jsp" />
+    </definition>
+    
+    <definition name="profilePage" extends="innerPage">
+        <put-attribute name="title" value="titles.profilePage.title"/>
+        <put-attribute name="currentHeadImports" value="/WEB-INF/chunks/profilePage/headImports.jsp" />
+        <put-attribute name="content" value="/WEB-INF/chunks/profilePage/page.jsp" />
+    </definition>
+    
+    <definition name="documentationPage" extends="innerPage">
+        <put-attribute name="title" value="documentationPage"/>
+        <put-attribute name="currentHeadImports" value="/WEB-INF/chunks/documentationPage/headImports.jsp" />
+        <put-attribute name="content" value="/WEB-INF/chunks/documentationPage/page.jsp" />
+    </definition>
+
+    <definition name="noCookiePage" extends="outerPage">
+        <put-attribute name="title" value="noCookiePage"/>
+        <put-attribute name="currentHeadImports" value="/WEB-INF/chunks/noCookiePage/headImports.jsp" />
+        <put-attribute name="content" value="/WEB-INF/chunks/noCookiePage/page.jsp" />
+    </definition>
+    
+</tiles-definitions>

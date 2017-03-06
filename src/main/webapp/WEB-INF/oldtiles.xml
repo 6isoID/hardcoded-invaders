@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+
+    <definition name="base.definition" template="/WEB-INF/pages/templates/baseLayout.jsp">
+        <put-attribute name="commonHeadImports" value="/WEB-INF/pages/common/headImports.jsp"/>
+        <put-attribute name="currentHeadImports" value=""/>
+        <put-attribute name="title" value=""/>
+        <put-attribute name="userBar" value="/WEB-INF/pages/common/userBar.jsp"/>
+        <put-attribute name="header" value="/WEB-INF/pages/common/header.jsp"/>
+        <put-attribute name="menu" value="/WEB-INF/pages/common/menu.jsp"/>
+        <put-attribute name="content" value=""/>
+        <put-attribute name="footer" value="/WEB-INF/pages/common/footer.jsp"/>
+    </definition>
+
+    <definition name="profile" extends="base.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/profile/headImports.jsp"/>
+        <put-attribute name="title" value="Profile"/>
+        <put-attribute name="content" value="/WEB-INF/pages/profile/profile.jsp"/>
+    </definition>
+
+    <definition name="showGames" extends="base.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/showGames/headImports.jsp"/>
+        <put-attribute name="title" value="All games"/>
+        <put-attribute name="content" value="/WEB-INF/pages/showGames/showGames.jsp"/>
+    </definition>
+
+    <definition name="statistics" extends="base.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/statistics/headImports.jsp"/>
+        <put-attribute name="title" value="Statistics"/>
+        <put-attribute name="content" value="/WEB-INF/pages/statistics/statistics.jsp"/>
+    </definition>
+
+    <definition name="currentGame" extends="base.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/currentGame/headImports.jsp"/>
+        <put-attribute name="title" value="Current game"/>
+        <put-attribute name="content" value="/WEB-INF/pages/currentGame/currentGame.jsp"/>
+    </definition>
+
+    <definition name="information" extends="base.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/information/headImports.jsp"/>
+        <put-attribute name="title" value="Information"/>
+        <put-attribute name="content" value="/WEB-INF/pages/information/information.jsp"/>
+    </definition>
+
+    <definition name="history" extends="base.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/history/headImports.jsp"/>
+        <put-attribute name="title" value="History"/>
+        <put-attribute name="content" value="/WEB-INF/pages/history/information.jsp"/>
+    </definition>
+
+    <definition name="gameStatistics" extends="base.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/gameStatistics/headImports.jsp"/>
+        <put-attribute name="title" value="Game statistics"/>
+        <put-attribute name="content" value="/WEB-INF/pages/gameStatistics/gameStatistics.jsp"/>
+    </definition>
+
+    <definition name="additional.definition" template="/WEB-INF/pages/templates/additionalLayout.jsp">
+        <put-attribute name="commonHeadImports" value="/WEB-INF/pages/common/headImports.jsp"/>
+        <put-attribute name="currentHeadImports" value=""/>
+        <put-attribute name="title" value=""/>
+        <put-attribute name="content" value=""/>
+    </definition>
+
+    <definition name="login" extends="additional.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/login/headImports.jsp"/>
+        <put-attribute name="title" value="Login"/>
+        <put-attribute name="content" value="/WEB-INF/pages/login/login.jsp"/>
+    </definition>
+
+    <definition name="signUp" extends="additional.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/signUp/headImports.jsp"/>
+        <put-attribute name="title" value="Sign up"/>
+        <put-attribute name="content" value="/WEB-INF/pages/signUp/signUp.jsp"/>
+    </definition>
+
+    <definition name="createGame" extends="additional.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/createGame/headImports.jsp"/>
+        <put-attribute name="title" value="Create game"/>
+        <put-attribute name="content" value="/WEB-INF/pages/createGame/createGame.jsp"/>
+    </definition>
+
+    <definition name="trainingLevel" extends="additional.definition">
+        <put-attribute name="currentHeadImports" value="/WEB-INF/pages/createTrainingLevel/headImports.jsp"/>
+        <put-attribute name="title" value="Create training level"/>
+        <put-attribute name="content" value="/WEB-INF/pages/createTrainingLevel/createTrainingLevel.jsp"/>
+    </definition>
+</tiles-definitions>
