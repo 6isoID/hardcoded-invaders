@@ -6,7 +6,6 @@ import com.epam.game.controller.forms.LoginForm;
 import com.epam.game.controller.validators.LoginValidator;
 import com.epam.game.dao.UserDAO;
 import com.epam.game.domain.Client;
-import com.epam.game.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,7 +26,7 @@ import javax.servlet.http.HttpSession;
  *
  */
 @Controller
-@SessionAttributes( value = AttributesEnum.CLIENT )
+@SessionAttributes(value = AttributesEnum.CLIENT )
 public class LoginController {
 
     @Autowired
@@ -55,17 +54,18 @@ public class LoginController {
     @RequestMapping( value = "/" + ViewsEnum.LOGIN + ViewsEnum.EXTENSION, method = RequestMethod.POST )
     public String onSubmit(@ModelAttribute Client client,
                            @ModelAttribute LoginForm loginForm, BindingResult result ) {
-        this.loginValidator.validate( loginForm, result );
-        if ( result.hasErrors() ) {
-            return ViewsEnum.LOGIN;
-        }
-        User user = this.userDAO.getUserWith( loginForm.getUserName(),
-                                              loginForm.getPassword() );
-        client.setLogin( user.getLogin() );
-        client.setId( user.getId() );
-        client.setUserName( user.getUserName() );
-        client.setAuthorities( user.getAuthorities() );
-        return "redirect:" + ViewsEnum.DOCUMENTATION + ViewsEnum.EXTENSION;
+//        this.loginValidator.validate( loginForm, result );
+//        if ( result.hasErrors() ) {
+//            return ViewsEnum.LOGIN;
+//        }
+//        User user = this.userDAO.getUserWith( loginForm.getUserName(),
+//                                              loginForm.getPassword() );
+//        client.setLogin( user.getLogin() );
+//        client.setId( user.getId() );
+//        client.setUserName( user.getUserName() );
+//        client.setAuthorities( user.getAuthorities() );
+//        return "redirect:" + ViewsEnum.DOCUMENTATION + ViewsEnum.EXTENSION;
+        return null;
     }
 
 

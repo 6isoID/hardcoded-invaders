@@ -96,12 +96,12 @@
 		           class="abys-branded">
 			<div class="form-row">
 				<label><spring:message code="label.login.login"/></label>
-				<form:input maxlength="30" id="usrName" path="userName"/>
+				<form:input maxlength="30" id="usrName" path="userName" name="usrName"/>
 				<form:errors path="userName" cssClass="errors"/>
 			</div>
 			<div class="form-row">
 				<label><spring:message code="label.login.password"/></label>
-				<form:password maxlength="30" id="passwd" path="password"/>
+				<form:password maxlength="30" id="passwd" path="password" name="passwd"/>
 				<form:errors path="password" cssClass="errors"/>
 			</div>
 			<div class="form-row">

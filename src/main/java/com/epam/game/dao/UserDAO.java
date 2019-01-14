@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -53,7 +54,7 @@ public class UserDAO {
         return DataAccessUtils.singleResult(jdbcTemplate.query("SELECT * FROM \"USERS\" WHERE \"LOGIN\" = ?", rowMapper, login));
     }
 
-    public void addAuthorityToUser(Long userId, Authority authority) {
+    public void addAuthorityToUser(Long userId, GrantedAuthority authority) {
         jdbcTemplate.update("INSERT INTO \"AUTHORITIES\" (\"USER_ID\", \"AUTHORITY\") VALUES(?, ?)", userId, authority.getAuthority());
     }
 
@@ -62,7 +63,7 @@ public class UserDAO {
                 user.getUserName(), user.getLogin(), user.getPassword(), user.getToken(), user.getEmail());
         User userFromDB = getUserWith(user.getLogin(), user.getPassword());
         if (userFromDB != null) {
-            for (Authority authority : user.getAuthorities()) {
+            for (GrantedAuthority authority : user.getAuthorities()) {
                 addAuthorityToUser(userFromDB.getId(), authority);
             }
         }
