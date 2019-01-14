@@ -4,7 +4,7 @@ CREATE TABLE "USERS"
    "ID" SERIAL,
    "USER_NAME" character varying(30) NOT NULL,
    "LOGIN" character varying(30),
-   "PASSWORD" character varying(30),
+   "PASSWORD" character varying(255),
    "BOT_NAME" character varying(30),
     "PHONE" character varying(30),
    "TOKEN" character(32) NOT NULL,

@@ -7,7 +7,6 @@ var timer;
 var nextGameTime;
 var text;
 var container;
-$(initTimer);
 
 function getNextGameTime(){
     var xmlhttp;

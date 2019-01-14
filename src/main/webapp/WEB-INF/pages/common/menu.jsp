@@ -3,7 +3,7 @@
 <ul>
 	<li class="item"><a href="profile.html"><spring:message code="label.menu.profile"/></a></li>
 	<li class="item"><a href="showGames.html"><spring:message code="label.menu.viewGames"/></a></li>
-	<c:if test="${sessionScope.client.hasAnyRole('ROLE_USER')}">
+	<c:if test="${pageContext.request.userPrincipal.principal.hasAnyRole('ROLE_USER')}">
 		<li class="item"><a href="currentGame.html"><spring:message code="label.menu.viewCurrentGame"/></a></li>
 	</c:if>
 	<li class="item"><a href="statistics.html"><spring:message code="label.menu.statistics"/></a></li>

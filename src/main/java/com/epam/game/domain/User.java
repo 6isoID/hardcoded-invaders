@@ -5,9 +5,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -21,14 +22,14 @@ public class User implements UserDetails {
     private String userName;
     private String login;
     private String password;
-    private List<Authority> authorities;
+    private List<GrantedAuthority> authorities;
     private String token;
     private String email;
     private String phone;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("USER"));
+        return authorities;
     }
 
     public String getUserName() {
@@ -58,5 +59,22 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean hasAnyRole(String... roles) {
+        List<GrantedAuthority> requestedRoles = Arrays.stream(roles)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+
+        return authorities.stream()
+                .anyMatch(requestedRoles::contains);
+    }
+
+    public boolean canControlGame(Game game) {
+        return this.id == game.getCreatorId() || hasAnyRole(Authority.ROLE_ADMIN.getAuthority());
+    }
+
+    public boolean canCreateAGame() {
+        return true;    // everyone can.
     }
 }

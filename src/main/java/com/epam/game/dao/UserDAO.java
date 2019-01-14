@@ -1,12 +1,12 @@
 package com.epam.game.dao;
 
-import com.epam.game.domain.Authority;
 import com.epam.game.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -74,11 +74,11 @@ public class UserDAO {
                 user.getUserName(), user.getLogin(), user.getPassword(), user.getToken(), user.getEmail(), user.getId());
     }
 
-    private List<Authority> getUserAuthorities(Long userId) {
-        return jdbcTemplate.query("SELECT * FROM \"AUTHORITIES\" WHERE \"USER_ID\" = ?", new RowMapper<Authority>() {
+    private List<GrantedAuthority> getUserAuthorities(Long userId) {
+        return jdbcTemplate.query("SELECT * FROM \"AUTHORITIES\" WHERE \"USER_ID\" = ?", new RowMapper<GrantedAuthority>() {
             @Override
-            public Authority mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return Authority.valueOf(rs.getString("AUTHORITY"));
+            public GrantedAuthority mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new SimpleGrantedAuthority(rs.getString("AUTHORITY"));
             }
         }, userId);
     }

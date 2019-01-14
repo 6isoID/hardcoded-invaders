@@ -81,7 +81,7 @@
 	<div class="right-align"><a href="info.html#tournament">Подробности здесь...</a></div>
 	<div class="login-ribbon">
 		<c:choose>
-			<c:when test="${client.hasAnyRole('ROLE_USER')}">
+			<c:when test="${pageContext.request.userPrincipal.principal.hasAnyRole('ROLE_USER')}">
 				<c:url var="docLink" value="/documentation.html"/>
 				<a href="${docLink}" id="login-pivot" class="icon-dot">Войти</a>
 			</c:when>

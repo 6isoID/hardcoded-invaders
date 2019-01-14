@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <c:if test="${not empty gameInfo.gameObject}">
-        <c:set var="isCreator" value="${client.canControlGame(gameInfo.gameStatistics)}" />
+        <c:set var="isCreator" value="${pageContext.request.userPrincipal.principal.canControlGame(gameInfo.gameStatistics)}" />
         <div id="beforeStartTable">
             <div class="ribbon">
                 <h4>Игра: <c:out value="${gameInfo.gameStatistics.title}" /></h4>
@@ -50,7 +50,7 @@
                         </td>
                     <c:if test="${isCreator}">
                         <td>
-                            <c:if test="${client.id ne player.id}">
+                            <c:if test="${pageContext.request.userPrincipal.principal.id ne player.id}">
                                 <c:url var="deletePlayerLink" value="deletePlayer.html">
                                     <c:param name="playerId" value="${player.id}" />
                                     <c:param name="gameId" value="${gameInfo.gameObject.id}" />

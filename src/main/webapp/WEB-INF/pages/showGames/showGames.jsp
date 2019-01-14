@@ -28,17 +28,17 @@
 						<td><a href="gameStatistics.html?id=${game.getValue().id}">${game.getValue().title}</a></td>
 						<td>${game.getValue().getNumberOfPlayers()}</td>
 						<td><c:if
-								test="${sessionScope.client.hasAnyRole('ROLE_USER')}">
+								test="${pageContext.request.userPrincipal.principal.hasAnyRole('ROLE_USER')}">
 								<c:choose>
 									<c:when
-										test="${ empty game.getValue().getUserById(sessionScope.client.id)}">
+										test="${ empty game.getValue().getUserById(pageContext.request.userPrincipal.principal.id)}">
 										<a href="joinToGame.html?gameid=${game.getKey()}"><spring:message code="label.showGames.join"/></a>
 									</c:when>
 									<c:otherwise>
 										<a href="leaveGame.html?gameid=${game.getKey()}"><spring:message code="label.showGames.leave"/></a>
 									</c:otherwise>
 								</c:choose>
-							</c:if> <c:if test="${sessionScope.client.hasAnyRole('ROLE_ADMIN')}">
+							</c:if> <c:if test="${pageContext.request.userPrincipal.principal.hasAnyRole('ROLE_ADMIN')}">
 								<a href="startGame.html?gameid=${game.getKey()}"><spring:message code="label.showGames.start"/></a>
 							</c:if></td>
 					</tr>
@@ -49,11 +49,11 @@
 </c:choose>
 
 <div>
-	<c:if test="${sessionScope.client.hasAnyRole('ROLE_ADMIN')}">
+	<c:if test="${pageContext.request.userPrincipal.principal.hasAnyRole('ROLE_ADMIN')}">
 		<a href="createGame.html"><spring:message code="label.showGames.createGame"/></a>
 	</c:if>
 	<br />
-	<c:if test="${sessionScope.client.hasAnyRole('ROLE_USER')}">
+	<c:if test="${pageContext.request.userPrincipal.principal.hasAnyRole('ROLE_USER')}">
 		<a href="trainingLevel.html"><spring:message code='label.showGames.trainingLevel'/></a>
 	</c:if>
 </div>
