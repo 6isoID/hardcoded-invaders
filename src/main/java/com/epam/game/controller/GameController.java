@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -275,11 +276,11 @@ public class GameController {
         if (game == null) {
             return "redirect:" + ViewsEnum.BATTLE + ViewsEnum.EXTENSION;
         }
-        if (game.getNumberOfPlayers() < Settings.MINIMAL_PLAYERS_NUMBER) {
+        if (game.getNumberOfPlayers() < gameDAO.getSettings().getMinPlayers()) {
             model.addAttribute(AttributesEnum.ERROR_SHOW_GAMES, "notEnoughPlayers.game.errorNumber");
             return "redirect:" + ViewsEnum.BATTLE + ViewsEnum.EXTENSION;
         }
-        GameThread gameThread = new GameThread(game);
+        GameThread gameThread = new GameThread(game, gameDAO.getSettings().getTurnDelayMs());
         new Thread(gameThread).start();
         if(client.hasAnyRole(Authority.ROLE_ADMIN.getAuthority())) {
             return showGameControl(id, model, client);
@@ -325,7 +326,7 @@ public class GameController {
             if (!model.containsAttribute(AttributesEnum.TRAINING_LEVEL_FORM)) {
                 model.addAttribute(AttributesEnum.TRAINING_LEVEL_FORM, new CreateTrainingLevelForm());
             }
-            model.addAttribute(AttributesEnum.MAX_TRAINING_BOTS, Settings.MAXIMAL_PLAYERS_NUMBER - 1);
+            model.addAttribute(AttributesEnum.MAX_TRAINING_BOTS, gameDAO.getSettings().getMaxPlayers() - 1);
             model.addAttribute(AttributesEnum.TOKEN, user.getToken());
             model.addAttribute(AttributesEnum.LEVEL_TYPES_MAP, LevelGenerators.getAvailableGenerators());
         }
@@ -359,8 +360,9 @@ public class GameController {
         gameToStart.setMapGenerator(LevelGenerators.getGenerator(createTrainingLevelForm.getType()));
         int i = 0;
         int trueI = 0;
-        while (trueI < Settings.TRAINIG_BOT_LOGINS.length && i < createTrainingLevelForm.getBotsCount()) {
-            User bot = userDAO.getUserWith(Settings.TRAINIG_BOT_LOGINS[i]);
+        List<String> trainigBotLogins = gameDAO.getSettings().getTrainigBotLogins();
+        while (trueI < trainigBotLogins.size() && i < createTrainingLevelForm.getBotsCount()) {
+            User bot = userDAO.getUserWith(trainigBotLogins.get(i));
             if (bot != null) {
                 gameToStart.addPlayer(bot);
                 gameToStart.addBot(bot);
@@ -368,10 +370,10 @@ public class GameController {
             }
             trueI++;
         }
-        if (gameToStart.getNumberOfPlayers() < Settings.MINIMAL_PLAYERS_NUMBER) {
+        if (gameToStart.getNumberOfPlayers() < gameDAO.getSettings().getMinPlayers()) {
             return ViewsEnum.TRAINING_LEVEL;
         }
-        GameThread gameThread = new GameThread(gameToStart);
+        GameThread gameThread = new GameThread(gameToStart, gameDAO.getSettings().getTurnDelayMs());
         new Thread(gameThread).start();
         return "redirect:" + ViewsEnum.TRAINING_LEVEL + ViewsEnum.EXTENSION;
     }

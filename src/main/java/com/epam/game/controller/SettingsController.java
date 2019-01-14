@@ -8,6 +8,7 @@ import com.epam.game.constants.AttributesEnum;
 import com.epam.game.constants.RequestType;
 import com.epam.game.constants.ViewsEnum;
 import com.epam.game.json.JSONConverter;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,14 +26,15 @@ import java.util.logging.Logger;
  * @author Sergey_Fedorov
  */
 @Controller
+@RequiredArgsConstructor
 public class SettingsController {
+
+    private final JSONConverter converter;
 
     @RequestMapping(value = "/" + ViewsEnum.SETTINGS + ViewsEnum.EXTENSION, method = RequestMethod.GET)
     public void getParameter(@RequestParam( value = AttributesEnum.AJAX_REQUEST_TYPE ) String requestType, HttpServletResponse response ) {
         RequestType type = RequestType.valueOf( requestType );
 
-        // Selection of generation type.
-        JSONConverter converter = new JSONConverter();
         JSONObject object = null;
         
         switch ( type ) {

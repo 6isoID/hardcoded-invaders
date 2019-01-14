@@ -5,10 +5,15 @@ import com.epam.game.constants.GameType;
 import com.epam.game.constants.Settings;
 import com.epam.game.domain.CommonStatistics;
 import com.epam.game.domain.Game;
+import com.epam.game.domain.GameSettings;
 import com.epam.game.domain.User;
 import com.epam.game.gamemodel.model.GameInstance;
 import com.epam.game.gamemodel.model.UserScore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,12 +27,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * @author Roman_Spiridonov
  */
 @Repository
+@CacheConfig(cacheNames = "settings")
 public class GameDAO {
 
 	private JdbcTemplate jdbcTemplate;
@@ -92,11 +102,62 @@ public class GameDAO {
 		}
 	};
 
+	@AllArgsConstructor
+	private enum SettingsOption {
+		READING_TIMEOUT(Long::valueOf),
+		PORT(Long::valueOf),
+		GAME_TURN_DELAY(Long::valueOf),
+		TRAINIG_BOT_LOGINS(v -> Arrays.asList(v.split(","))),
+		NEXT_GAME_TIME(v -> LocalDateTime.parse(v, DateTimeFormatter.ISO_DATE_TIME)),
+		ERROR_RESPONSE_DELAY(Long::valueOf),
+		STAT_ROWS_TO_SHOW(Integer::valueOf),
+		REGISTRATION_IS_OPEN(Boolean::valueOf);
+
+
+		@Getter
+		private Function<String, Object> extractor;
+		public static SettingsOption getByName(String option) {
+			return Stream.of(values())
+					.filter(opt -> opt.name().equals(option))
+					.findFirst()
+					.orElseThrow(IllegalArgumentException::new);
+		}
+	}
+
+	private RowMapper<GameSettings> settingsMapper = new RowMapper<GameSettings>() {
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public GameSettings mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Map<SettingsOption, Object> settings = new HashMap<>();
+			do {
+				SettingsOption option = SettingsOption.getByName(rs.getString("ID"));
+				String val = rs.getString("VAL");
+				settings.put(option, option.getExtractor().apply(val));
+			} while (rs.next());
+
+			return GameSettings.builder()
+					.clientTimeoutMs((Long) settings.get(SettingsOption.READING_TIMEOUT))
+					.turnDelayMs((Long) settings.get(SettingsOption.GAME_TURN_DELAY))
+					.trainigBotLogins((List<String>) settings.get(SettingsOption.TRAINIG_BOT_LOGINS))
+					.nextGame((LocalDateTime) settings.get(SettingsOption.NEXT_GAME_TIME))
+					.errorDelayMs((Long) settings.get(SettingsOption.ERROR_RESPONSE_DELAY))
+					.startRowsToShow((Integer) settings.get(SettingsOption.STAT_ROWS_TO_SHOW))
+					.registrationOpened((Boolean) settings.get(SettingsOption.REGISTRATION_IS_OPEN))
+					.build();
+		}
+	};
+
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		this.namedTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
+
+	@Cacheable("settings")
+    public GameSettings getSettings() {
+		return jdbcTemplate.queryForObject("select \"ID\", \"VAL\" from \"SETTINGS\"", settingsMapper);
+	}
 
     public Long getNumberOfPlayedGamesFor(User user) {
 //	    "select count(*) from \"GAME_SESSION_STATISTICS\" where \"USER_ID\" = ?"
@@ -254,7 +315,7 @@ public class GameDAO {
 	public List<CommonStatistics> getCommonStatistics() {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		
-		parameters.addValue("botNames", Arrays.asList(Settings.TRAINIG_BOT_LOGINS));
+		parameters.addValue("botNames", getSettings().getTrainigBotLogins());
 		String query = "select \n" +
 		               "commonCount.\"TYPE\" game_TYPE, \n" +
 		               "commonCount.count GAME_COUNT, \n" +

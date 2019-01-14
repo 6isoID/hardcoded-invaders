@@ -86,7 +86,7 @@
 				<a href="${docLink}" id="login-pivot" class="icon-dot">Войти</a>
 			</c:when>
 			<c:otherwise>
-                <c:if test="${Settings.REGISTRATION_IS_OPEN}">
+                <c:if test="${registrationIsOpen}">
 				    <a href="signUp.html" class="icon-triangle">Зарегистрироваться и подготовиться к игре</a>
                 </c:if>
 				<a href="#login-pivot" id="login-pivot" class="icon-dot" onclick="toggleLoginForm()">Войти</a>

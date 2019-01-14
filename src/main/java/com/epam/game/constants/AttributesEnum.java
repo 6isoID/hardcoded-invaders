@@ -34,6 +34,8 @@ public final class AttributesEnum {
     public static final String GAME_INFO = "gameInfo";
     public static final String ERROR_MSG = "errorMessage";
 
+    public static final String REGISTRATION_IS_OPEN = "registrationIsOpen";
+
     private AttributesEnum() {
     }
 }

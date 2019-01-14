@@ -84,7 +84,7 @@ public class Model {
      * @return
      */
     public GameInstance createNewGame(long id, GameType gameType, String title, User creator) {
-        GameInstance newGame = new GameInstance(id, gameType, creator);
+        GameInstance newGame = new GameInstance(id, gameType, gameDAO.getSettings(), creator);
         newGame.setTitle(title);
         games.put(newGame.getId(), newGame);
         newGame.addFinishListener(new GameFinishedListener() {

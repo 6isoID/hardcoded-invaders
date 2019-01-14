@@ -27,9 +27,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 
     implementation 'org.springframework.security:spring-security-taglibs'
 
+    implementation 'com.github.ben-manes.caffeine:caffeine'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'org.apache.tiles:tiles-jsp:3.0.8'
     compile group: 'javax.servlet', name: 'jstl', version: '1.2'

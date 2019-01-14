@@ -25,9 +25,15 @@ public class SocketListnerThread implements Runnable {
 
     private ClientRequestParser parser;
 
+    private long readTimeoutMs;
+
     protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
     
     private boolean alive = true;
+
+    public SocketListnerThread(long readTimeoutMs) {
+        this.readTimeoutMs = readTimeoutMs;
+    }
 
     public void run() {
         try {
@@ -41,7 +47,7 @@ public class SocketListnerThread implements Runnable {
                 Socket socket = serverSocket.accept();
                 parser = new SAXParserWrapper();
                 this.threadPool.execute(new ClientRequestHandlerThread(socket,
-                        parser));
+                        parser, readTimeoutMs));
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

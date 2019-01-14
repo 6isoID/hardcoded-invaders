@@ -32,6 +32,7 @@ public class ClientRequestHandlerThread implements Runnable {
     private InputStream inputSocketStream;
     private ClientRequestParser parser;
     private byte[] buffer = new byte[1000];
+    private long readTimeoutMs;
 
     /**
      * 
@@ -40,11 +41,12 @@ public class ClientRequestHandlerThread implements Runnable {
      * @param parser
      *            - Parser of request
      */
-    public ClientRequestHandlerThread(Socket socket, ClientRequestParser parser) {
+    public ClientRequestHandlerThread(Socket socket, ClientRequestParser parser, long readTimeoutMs) {
         this.socket = socket;
         try {
             this.inputSocketStream = socket.getInputStream();
             this.parser = parser;
+            this.readTimeoutMs = readTimeoutMs;
             Thread.sleep(100);
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -104,7 +106,7 @@ public class ClientRequestHandlerThread implements Runnable {
         int i = 0;
         long startTime = System.currentTimeMillis();
         long readingTime = 0;
-        while(!lastTagReceived && readingTime < Settings.READING_TIMEOUT){  // if "/request" is readed or reading take too long, quit and return what we've got.
+        while(!lastTagReceived && readingTime < readTimeoutMs){  // if "/request" is readed or reading take too long, quit and return what we've got.
             if(inputSocketStream.available() > 0){                          // there is data in the stream, read it and check whether it completes request.
                 readed = inputSocketStream.read(buffer);
                 result.append(new String(buffer), 0, readed);
