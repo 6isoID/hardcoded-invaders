@@ -37,6 +37,8 @@ dependencies {
     implementation 'org.apache.tiles:tiles-request-api:1.0.6'
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 
+    compile 'org.projectlombok:lombok:1.16.20'
+
 //    compile 'org.springframework.security:spring-security-config'
     compile 'org.postgresql:postgresql'
 
