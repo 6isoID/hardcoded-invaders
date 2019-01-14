@@ -81,12 +81,12 @@
 	<div class="right-align"><a href="info.html#tournament">Подробности здесь...</a></div>
 	<div class="login-ribbon">
 		<c:choose>
-			<c:when test="${client.hasAnyRole('ROLE_USER')}">
+			<c:when test="${pageContext.request.userPrincipal.principal.hasAnyRole('ROLE_USER')}">
 				<c:url var="docLink" value="/documentation.html"/>
 				<a href="${docLink}" id="login-pivot" class="icon-dot">Войти</a>
 			</c:when>
 			<c:otherwise>
-                <c:if test="${Settings.REGISTRATION_IS_OPEN}">
+                <c:if test="${registrationIsOpen}">
 				    <a href="signUp.html" class="icon-triangle">Зарегистрироваться и подготовиться к игре</a>
                 </c:if>
 				<a href="#login-pivot" id="login-pivot" class="icon-dot" onclick="toggleLoginForm()">Войти</a>
@@ -96,12 +96,12 @@
 		           class="abys-branded">
 			<div class="form-row">
 				<label><spring:message code="label.login.login"/></label>
-				<form:input maxlength="30" id="usrName" path="userName"/>
+				<form:input maxlength="30" id="usrName" path="userName" name="usrName"/>
 				<form:errors path="userName" cssClass="errors"/>
 			</div>
 			<div class="form-row">
 				<label><spring:message code="label.login.password"/></label>
-				<form:password maxlength="30" id="passwd" path="password"/>
+				<form:password maxlength="30" id="passwd" path="password" name="passwd"/>
 				<form:errors path="password" cssClass="errors"/>
 			</div>
 			<div class="form-row">

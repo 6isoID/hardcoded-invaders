@@ -3,22 +3,18 @@ package com.epam.game.controller;
 import com.epam.game.constants.AttributesEnum;
 import com.epam.game.constants.ViewsEnum;
 import com.epam.game.controller.forms.LoginForm;
-import com.epam.game.controller.validators.LoginValidator;
-import com.epam.game.dao.UserDAO;
-import com.epam.game.domain.Client;
-import com.epam.game.domain.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.epam.game.dao.GameDAO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * Controller for working with login page.
@@ -27,58 +23,22 @@ import javax.servlet.http.HttpSession;
  *
  */
 @Controller
-@SessionAttributes( value = AttributesEnum.CLIENT )
+@RequiredArgsConstructor
 public class LoginController {
 
-    @Autowired
-    private UserDAO userDAO;
-
-    @Autowired
-    private LoginValidator loginValidator;
-
-
+    private final GameDAO gameDAO;
 
     @RequestMapping( value = "/" + ViewsEnum.LOGIN + ViewsEnum.EXTENSION, method = RequestMethod.GET )
     public String showLoginForm( ModelMap model ) {
-        LoginForm loginForm = new LoginForm();
-        Client client = (Client) model.get( AttributesEnum.CLIENT );
-        if ( client == null ) {
-            client = new Client();
-        }
-        model.addAttribute( AttributesEnum.LOGIN_FORM, loginForm );
-        model.addAttribute( AttributesEnum.CLIENT, client );
+        model.addAttribute( AttributesEnum.LOGIN_FORM, new LoginForm() );
+        model.addAttribute(AttributesEnum.REGISTRATION_IS_OPEN, gameDAO.getSettings().isRegistrationOpened());
         return ViewsEnum.LOGIN;
     }
 
-
-
-    @RequestMapping( value = "/" + ViewsEnum.LOGIN + ViewsEnum.EXTENSION, method = RequestMethod.POST )
-    public String onSubmit(@ModelAttribute Client client,
-                           @ModelAttribute LoginForm loginForm, BindingResult result ) {
-        this.loginValidator.validate( loginForm, result );
-        if ( result.hasErrors() ) {
-            return ViewsEnum.LOGIN;
-        }
-        User user = this.userDAO.getUserWith( loginForm.getUserName(),
-                                              loginForm.getPassword() );
-        client.setLogin( user.getLogin() );
-        client.setId( user.getId() );
-        client.setUserName( user.getUserName() );
-        client.setAuthorities( user.getAuthorities() );
-        return "redirect:" + ViewsEnum.DOCUMENTATION + ViewsEnum.EXTENSION;
-    }
-
-
-
     @RequestMapping( value = "/" + ViewsEnum.LOGOUT + ViewsEnum.EXTENSION, method = RequestMethod.GET )
-    public String logout(HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model ) {
-       
-        session.setAttribute( AttributesEnum.CLIENT, null );
-        model.remove( AttributesEnum.CLIENT);
-        session.removeAttribute( AttributesEnum.CLIENT );
-         session.invalidate();
+    public String logout(HttpServletResponse response, HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        new SecurityContextLogoutHandler().logout(request, response, authentication);
         return "redirect:" + ViewsEnum.LOGIN + ViewsEnum.EXTENSION;
     }
-
-
 }

@@ -4,7 +4,7 @@ CREATE TABLE "USERS"
    "ID" SERIAL,
    "USER_NAME" character varying(30) NOT NULL,
    "LOGIN" character varying(30),
-   "PASSWORD" character varying(30),
+   "PASSWORD" character varying(255),
    "BOT_NAME" character varying(30),
     "PHONE" character varying(30),
    "TOKEN" character(32) NOT NULL,
@@ -76,3 +76,9 @@ ADD COLUMN "EMAIL" character varying(200);
 
 ALTER TABLE "GAME_SESSION_STATISTICS"
 ADD COLUMN "TYPE" varchar(30) DEFAULT NULL;
+
+CREATE TABLE "SETTINGS" (
+  "ID" varchar(50),
+  "VAL" varchar(1024),
+  PRIMARY KEY ("ID")
+);

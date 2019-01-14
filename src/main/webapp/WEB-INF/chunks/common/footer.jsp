@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <div id="footer" class="clear-fix">
 	<%--<a href="http://vk.com/hardinv" id="vk-link"><img src="img/vk.png">Новости, обсуждения, дополнительная информация</a>--%>
-	<span id="copy" class="float-right">EPAM Systems, 2014</span>
+	<span id="copy" class="float-right">EPAM Systems, 2019</span>
 	<script type="text/javascript">
 
 		  var _gaq = _gaq || [];

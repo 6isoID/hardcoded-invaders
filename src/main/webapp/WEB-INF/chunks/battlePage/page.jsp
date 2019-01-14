@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <c:choose>
-	<c:when test="${empty game or game.type eq 'TRAINING_LEVEL' or client.hasAnyRole('ROLE_ADMIN')}">
+	<c:when test="${empty game or game.type eq 'TRAINING_LEVEL' or pageContext.request.userPrincipal.principal.hasAnyRole('ROLE_ADMIN')}">
 		<jsp:include page="showGamesList.jsp" />
 	</c:when>
 	<c:otherwise>

@@ -1,13 +1,16 @@
 package com.epam.game.json;
 
-import com.epam.game.constants.Settings;
+import com.epam.game.dao.GameDAO;
 import com.epam.game.domain.User;
 import com.epam.game.gamemodel.model.GameInstance;
 import com.epam.game.gamemodel.model.UserScore;
 import com.epam.game.gamemodel.model.Vertex;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.time.ZoneOffset;
 import java.util.List;
 
 /**
@@ -17,7 +20,11 @@ import java.util.List;
  * @author Evgeny_Tetuhin
  * 
  */
+@Component
 public class JSONConverter {
+
+    @Autowired
+    private GameDAO gameDAO;
 
     /**
      * Creates a JSONObject representing the game field.
@@ -134,11 +141,9 @@ public class JSONConverter {
         return result;
     }
 
-
-
     public JSONObject generateTurnDurationMessage() {
         JSONObject result = new JSONObject();
-        result.put("TurnDelay", Settings.GAME_TURN_DELAY);
+        result.put("TurnDelay", gameDAO.getSettings().getTurnDelayMs());
         return result;
 
     }
@@ -147,7 +152,7 @@ public class JSONConverter {
 
     public JSONObject generateNextGameTimeMessage() {
         JSONObject result = new JSONObject();
-        result.put("NextGameTime", Settings.NEXT_GAME_TIME);
+        result.put("NextGameTime", gameDAO.getSettings().getNextGame().toEpochSecond(ZoneOffset.of("UTC")) * 1000);
         return result;
     }
 }

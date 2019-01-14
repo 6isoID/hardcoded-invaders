@@ -1,16 +1,16 @@
 package com.epam.game.gamemodel.gamehandler;
 
-import com.epam.game.constants.Settings;
 import com.epam.game.gamemodel.model.GameInstance;
 
 public class GameThread implements Runnable {
 
-    private final long TIMEOUT = Settings.GAME_TURN_DELAY;
+    private final long turnDelayMs;
 
     private GameInstance game;
 
-    public GameThread(GameInstance game) {
+    public GameThread(GameInstance game, long turnDelayMs) {
         this.game = game;
+        this.turnDelayMs = turnDelayMs;
     }
 
     public GameInstance getGame() {
@@ -26,7 +26,7 @@ public class GameThread implements Runnable {
         }
         while (game.isStarted() && !game.isFinished()) {            
             try {
-                Thread.sleep(TIMEOUT);
+                Thread.sleep(turnDelayMs);
                 game.nextTurn();
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block

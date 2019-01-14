@@ -1,4 +1,4 @@
-package com.epam.game.conf;
+package com.epam.game.conf.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

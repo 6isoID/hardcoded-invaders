@@ -8,3 +8,8 @@ spring:
   security:
     user:
       password: 123
+
+  cache:
+    cache-names: settings
+    caffeine:
+      spec: expireAfterAccess=5s

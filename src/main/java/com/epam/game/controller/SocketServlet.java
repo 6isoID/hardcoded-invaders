@@ -1,6 +1,8 @@
 package com.epam.game.controller;
 
+import com.epam.game.dao.GameDAO;
 import com.epam.game.gameinfrastructure.requessthandling.SocketListnerThread;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +21,8 @@ public class SocketServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        listenerThread = new SocketListnerThread();
+        long clientTimeout = WebApplicationContextUtils.getWebApplicationContext(getServletContext()).getBean(GameDAO.class).getSettings().getClientTimeoutMs();
+        listenerThread = new SocketListnerThread(clientTimeout);
         new Thread(listenerThread).start();
     }
 

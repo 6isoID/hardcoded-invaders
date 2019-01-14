@@ -22,3 +22,6 @@
 		  })();
 		
 	</script>
+<script type="text/javascript" >
+	initTimer();
+</script>
