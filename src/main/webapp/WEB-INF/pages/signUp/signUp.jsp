@@ -2,7 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <div id="signUpContainer">
 	<h2><spring:message code="label.signUp.header"/></h2>
-	<form:form commandName="signUpForm" action="signUp.html" method="POST"
+	<form:form modelAttribute="signUpForm" action="signUp.html" method="POST"
 		onsubmit="return validateData();">
 		<div class="row">
 			<label class="signUp"><spring:message code="label.signUp.userName"/>:</label>

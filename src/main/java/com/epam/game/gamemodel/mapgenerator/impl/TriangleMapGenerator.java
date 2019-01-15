@@ -1,18 +1,12 @@
 package com.epam.game.gamemodel.mapgenerator.impl;
 
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import com.epam.game.domain.User;
 import com.epam.game.gamemodel.mapgenerator.MapGenerator;
 import com.epam.game.gamemodel.model.Point;
 import com.epam.game.gamemodel.model.Vertex;
 import com.epam.game.gamemodel.model.VertexType;
+
+import java.util.*;
 
 /**
  * MapGenerator implementation. It has both default and parametrized

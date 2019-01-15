@@ -1,28 +1,22 @@
 package com.epam.game.gameinfrastructure.requessthandling;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.Socket;
-import java.nio.CharBuffer;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.epam.game.constants.Settings;
 import com.epam.game.exceptions.GameIsFinishedException;
-import com.epam.game.exceptions.IllegalCommandException;
 import com.epam.game.exceptions.NoSuchGameException;
 import com.epam.game.exceptions.RequestReadingException;
 import com.epam.game.gameinfrastructure.actions.ActionFactory;
 import com.epam.game.gameinfrastructure.parser.ClientRequestParser;
 import com.epam.game.gameinfrastructure.parser.ClientsDataObject;
 import com.epam.game.gameinfrastructure.parser.RequestXMLTag;
-import com.epam.game.gameinfrastructure.parser.ResponseXMLTag;
 import com.epam.game.gamemodel.model.GameInstance;
 import com.epam.game.gamemodel.model.Model;
 import com.epam.game.gamemodel.model.action.Action;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Thread for handling of clients request.
@@ -38,6 +32,7 @@ public class ClientRequestHandlerThread implements Runnable {
     private InputStream inputSocketStream;
     private ClientRequestParser parser;
     private byte[] buffer = new byte[1000];
+    private long readTimeoutMs;
 
     /**
      * 
@@ -46,11 +41,12 @@ public class ClientRequestHandlerThread implements Runnable {
      * @param parser
      *            - Parser of request
      */
-    public ClientRequestHandlerThread(Socket socket, ClientRequestParser parser) {
+    public ClientRequestHandlerThread(Socket socket, ClientRequestParser parser, long readTimeoutMs) {
         this.socket = socket;
         try {
             this.inputSocketStream = socket.getInputStream();
             this.parser = parser;
+            this.readTimeoutMs = readTimeoutMs;
             Thread.sleep(100);
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -89,7 +85,7 @@ public class ClientRequestHandlerThread implements Runnable {
             sendDelayedMessage("User has not joined any game.");
         } catch (GameIsFinishedException e) {
             sendDelayedMessage(e.getMessage(), "gameover");
-        } catch (RequestReadingException e){ 
+        } catch (RequestReadingException e){
             sendDelayedMessage("Time limit exceeded while receiving the message.");
         } catch (Exception e) {
             sendDelayedMessage(xmlEscape(e.getMessage()));
@@ -101,7 +97,7 @@ public class ClientRequestHandlerThread implements Runnable {
      * 
      * @return
      * @throws IOException
-     * @throws RequestReadingException 
+     * @throws RequestReadingException
      */
     private String readInputMessage() throws IOException, RequestReadingException {
         StringBuilder result = new StringBuilder();
@@ -110,7 +106,7 @@ public class ClientRequestHandlerThread implements Runnable {
         int i = 0;
         long startTime = System.currentTimeMillis();
         long readingTime = 0;
-        while(!lastTagReceived && readingTime < Settings.READING_TIMEOUT){  // if "/request" is readed or reading take too long, quit and return what we've got.
+        while(!lastTagReceived && readingTime < readTimeoutMs){  // if "/request" is readed or reading take too long, quit and return what we've got.
             if(inputSocketStream.available() > 0){                          // there is data in the stream, read it and check whether it completes request.
                 readed = inputSocketStream.read(buffer);
                 result.append(new String(buffer), 0, readed);
@@ -137,7 +133,7 @@ public class ClientRequestHandlerThread implements Runnable {
         try{
             Thread.sleep(Settings.ERROR_RESPONSE_DELAY);
             String typeAttr = (type.isEmpty()) ? "" : "type=\"" + type + "\"";
-            SocketResponseSender.getInstance().sendMessage(socket, 
+            SocketResponseSender.getInstance().sendMessage(socket,
                 String.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?><response><planets /><errors><error %s>%s</error></errors></response>", typeAttr, msg));
             socket.close();
         } catch(Exception e) {

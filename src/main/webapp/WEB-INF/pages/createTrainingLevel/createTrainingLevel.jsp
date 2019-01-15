@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <div id="trainingLevelContainer">
 	<h2><spring:message code="label.trainingLevel.header"/></h2>
-	<form:form commandName="createTrainingLevelForm" method="POST" >
+	<form:form modelAttribute="createTrainingLevelForm" method="POST" >
 		<div class="row">
 			<spring:message code="text.trainingLevel.get-ready" />
 		</div>

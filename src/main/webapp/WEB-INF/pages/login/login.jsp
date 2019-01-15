@@ -2,7 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <div id="loginContainer">
 	<h2><spring:message code="label.login.header"/></h2>
-	<form:form commandName="loginForm" action = "login.html" method="POST" accept-charset="UTF-8"	onsubmit="return validateLogin();">
+	<form:form modelAttribute="loginForm" action = "login.html" method="POST" accept-charset="UTF-8"	onsubmit="return validateLogin();">
 		<div class="row">
 			<label class="login"><spring:message code="label.login.login"/></label>
 			<form:input maxlength="30" cssClass="field login" id="usrName" path="userName" />

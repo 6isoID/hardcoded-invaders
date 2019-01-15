@@ -6,9 +6,9 @@
 
 <h2><spring:message code="label.profile.header"/></h2>
 
-	<form:form commandName="profileForm" action="profile.html"
+	<form:form modelAttribute="profileForm" action="profile.html"
 		method="POST" onsubmit="return validateData()">
-		<h3><spring:message code="label.profile.yourId"/>: ${sessionScope.client.id}</h3>
+		<h3><spring:message code="label.profile.yourId"/>: ${pageContext.request.userPrincipal.principal.id}</h3>
 		<div class="row">
 			<label class="profile"><spring:message code="label.profile.userName"/>:</label>
 			<form:input maxlength="30" cssClass="field common" path="userName" />
@@ -22,7 +22,7 @@
 			<label class="profile"><spring:message code="label.profile.token"/>:</label> ${requestScope.token}
 		</div>
 		<a href = "generateToken.html"><spring:message code="label.profile.generateToken"/></a>
-		<c:if test="${sessionScope.client.hasAnyRole('ROLE_USER')}">
+		<c:if test="${pageContext.request.userPrincipal.principal.hasAnyRole('ROLE_USER')}">
 			<h3><spring:message code="label.profile.gameStatistics"/></h3>
 			<div class="row">
 				<label class="profile"><spring:message code="label.profile.playedGames"/>:</label> ${requestScope.playedGames}

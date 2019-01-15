@@ -1,8 +1,5 @@
 package com.epam.game.controller.validators;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Custom Validation Utils.
  * 

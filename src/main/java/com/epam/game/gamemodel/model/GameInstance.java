@@ -1,13 +1,8 @@
 package com.epam.game.gamemodel.model;
 
-import java.sql.Timestamp;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.epam.game.bot.main.Bot;
 import com.epam.game.constants.GameType;
-import com.epam.game.constants.Settings;
+import com.epam.game.domain.GameSettings;
 import com.epam.game.domain.User;
 import com.epam.game.exceptions.IllegalCommandException;
 import com.epam.game.exceptions.NotEnoughPlayersException;
@@ -17,6 +12,10 @@ import com.epam.game.gamemodel.model.events.GameAbandoned;
 import com.epam.game.gamemodel.model.events.GameAbandonedListener;
 import com.epam.game.gamemodel.model.events.GameFinished;
 import com.epam.game.gamemodel.model.events.GameFinishedListener;
+
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Represents instance of a game field.
@@ -86,25 +85,28 @@ public class GameInstance extends Observable {
 
 	private Timestamp timeCreated;
 
-	public GameInstance(long id, GameType type, User creator) {
-		this.vertices = new HashMap<Long, Vertex>();
-		this.players = new HashMap<Long, User>();
-		this.currentChanges = new LinkedList<Change>();
-		this.lastTurnChanges = new LinkedList<Change>();
-		this.survivors = new LinkedList<User>();
+	private GameSettings gameSettings;
+
+	public GameInstance(long id, GameType type, GameSettings gameSettings, User creator) {
+		this.vertices = new HashMap<>();
+		this.players = new HashMap<>();
+		this.currentChanges = new LinkedList<>();
+		this.lastTurnChanges = new LinkedList<>();
+		this.survivors = new LinkedList<>();
 		this.id = id;
 		this.type = type;
-		this.bots = new LinkedList<Bot>();
-		this.finishListeners = new ArrayList<GameFinishedListener>();
-		this.abandonListeners = new ArrayList<GameAbandonedListener>();
-		this.statistic = new LinkedList<UserScore>();
+		this.bots = new LinkedList<>();
+		this.finishListeners = new ArrayList<>();
+		this.abandonListeners = new ArrayList<>();
+		this.statistic = new LinkedList<>();
 		this.creator = creator;
 	    this.timeCreated = new Timestamp(System.currentTimeMillis());
+	    this.gameSettings = gameSettings;
         addObserver(SocketResponseSender.getInstance());
     }
 
-    public GameInstance(long id, MapGenerator generator, GameType type, User creator) {
-        this(id, type, creator);
+    public GameInstance(long id, MapGenerator generator, GameType type, GameSettings gameSettings, User creator) {
+        this(id, type, gameSettings, creator);
         this.mapGenerator = generator;
     }
 
@@ -184,7 +186,7 @@ public class GameInstance extends Observable {
             addDefeated(defeated);
         }
         survivors = newSurvivors;
-        if (survivors.size() == 1 || survivors.size() == 0 || srv.isEmpty() || turnsNumber >= Settings.GAME_TURNS_LIMIT) {
+        if (survivors.size() == 1 || survivors.size() == 0 || srv.isEmpty() || turnsNumber >= gameSettings.getRoundTurns()) {
             finish();
         }
     }
@@ -528,7 +530,7 @@ public class GameInstance extends Observable {
     }
 
     public boolean isFull() {
-        return players.size() >= Settings.MAXIMAL_PLAYERS_NUMBER;
+        return players.size() >= gameSettings.getMaxPlayers();
     }
 
     private void setCreator(User creator) { // so far creator must not be changed

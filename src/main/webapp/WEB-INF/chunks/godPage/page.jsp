@@ -3,7 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 	
-<form:form commandName="multipleLoginForm">
+<form:form modelAttribute="multipleLoginForm">
 	<fieldset>
 		<c:out value="${pageMessage}"/><br>
 		<form:input path="logins"/>

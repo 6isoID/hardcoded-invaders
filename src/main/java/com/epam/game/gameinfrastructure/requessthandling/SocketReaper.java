@@ -8,7 +8,6 @@ import java.net.SocketTimeoutException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 /**
  * Created by Garin on 09.08.2014.

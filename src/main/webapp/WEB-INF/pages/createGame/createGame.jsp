@@ -2,7 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <div id="createGameContainer">
 	<h2><spring:message code="label.createGame.header"/></h2>
-	<form:form commandName="createGameForm" action="createGame.html" method="POST"
+	<form:form modelAttribute="createGameForm" action="createGame.html" method="POST"
 		onsubmit="return validateData();">
 		<div class="row">
 			<label class="createGame"><spring:message code="label.createGame.title"/>:</label>

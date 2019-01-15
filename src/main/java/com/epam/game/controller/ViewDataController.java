@@ -1,10 +1,12 @@
 package com.epam.game.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.epam.game.constants.AttributesEnum;
+import com.epam.game.constants.RequestType;
+import com.epam.game.constants.ViewsEnum;
+import com.epam.game.gamemodel.model.GameInstance;
+import com.epam.game.gamemodel.model.Model;
+import com.epam.game.json.JSONConverter;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,12 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.epam.game.constants.AttributesEnum;
-import com.epam.game.constants.RequestType;
-import com.epam.game.constants.ViewsEnum;
-import com.epam.game.gamemodel.model.GameInstance;
-import com.epam.game.gamemodel.model.Model;
-import com.epam.game.json.JSONConverter;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +28,10 @@ import java.util.logging.Logger;
  */
 @Controller
 @SessionAttributes(value = AttributesEnum.CLIENT)
+@RequiredArgsConstructor
 public class ViewDataController {
+
+    private final JSONConverter converter;
 
     @RequestMapping(value = "/" + ViewsEnum.VIEW_DATA + ViewsEnum.EXTENSION, method = RequestMethod.GET)
     public void getViewData(
@@ -48,7 +50,6 @@ public class ViewDataController {
             return;
         }
         // Selection of generation type.
-        JSONConverter converter = new JSONConverter();
         JSONObject object = null;
         switch (type) {
         case GAME_FIELD:

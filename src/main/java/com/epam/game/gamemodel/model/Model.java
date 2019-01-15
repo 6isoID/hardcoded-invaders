@@ -1,21 +1,19 @@
 package com.epam.game.gamemodel.model;
 
-import java.util.EventObject;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.epam.game.constants.GameState;
 import com.epam.game.constants.GameType;
+import com.epam.game.dao.GameDAO;
 import com.epam.game.domain.Game;
 import com.epam.game.domain.User;
 import com.epam.game.gamemodel.mapgenerator.MapGenerator;
 import com.epam.game.gamemodel.model.events.GameAbandonedListener;
 import com.epam.game.gamemodel.model.events.GameFinishedListener;
-import com.epam.game.model.dao.GameDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
+import java.util.EventObject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Stores and maintains all game instances.
@@ -86,7 +84,7 @@ public class Model {
      * @return
      */
     public GameInstance createNewGame(long id, GameType gameType, String title, User creator) {
-        GameInstance newGame = new GameInstance(id, gameType, creator);
+        GameInstance newGame = new GameInstance(id, gameType, gameDAO.getSettings(), creator);
         newGame.setTitle(title);
         games.put(newGame.getId(), newGame);
         newGame.addFinishListener(new GameFinishedListener() {

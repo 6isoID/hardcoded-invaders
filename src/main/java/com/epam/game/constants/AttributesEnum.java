@@ -1,7 +1,5 @@
 package com.epam.game.constants;
 
-import java.util.Collection;
-
 public final class AttributesEnum {
 
     public static final String CLIENT = "client";
@@ -35,6 +33,8 @@ public final class AttributesEnum {
     public static final String PLAYER_ID = "playerId";
     public static final String GAME_INFO = "gameInfo";
     public static final String ERROR_MSG = "errorMessage";
+
+    public static final String REGISTRATION_IS_OPEN = "registrationIsOpen";
 
     private AttributesEnum() {
     }

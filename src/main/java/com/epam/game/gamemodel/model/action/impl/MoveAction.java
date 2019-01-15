@@ -1,13 +1,13 @@
 package com.epam.game.gamemodel.model.action.impl;
 
-import java.util.logging.Logger;
-
 import com.epam.game.domain.User;
 import com.epam.game.exceptions.IllegalCommandException;
 import com.epam.game.gameinfrastructure.requessthandling.PeerController;
 import com.epam.game.gameinfrastructure.requessthandling.SocketResponseSender;
 import com.epam.game.gamemodel.model.GameInstance;
 import com.epam.game.gamemodel.model.action.Action;
+
+import java.util.logging.Logger;
 
 /**
  * Action object for moving units from vertex to vertex.

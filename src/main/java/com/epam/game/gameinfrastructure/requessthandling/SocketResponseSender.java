@@ -1,11 +1,11 @@
 package com.epam.game.gameinfrastructure.requessthandling;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.net.Socket;
-import java.util.*;
+import com.epam.game.domain.User;
+import com.epam.game.gameinfrastructure.parser.XmlResponseGenerator;
+import com.epam.game.gamemodel.model.GameInstance;
+import com.epam.game.gamemodel.model.Vertex;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -13,14 +13,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-
-import com.epam.game.domain.User;
-import com.epam.game.gameinfrastructure.parser.XmlResponseGenerator;
-import com.epam.game.gamemodel.model.GameInstance;
-import com.epam.game.gamemodel.model.Vertex;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.net.Socket;
+import java.util.*;
 
 /**
  * Singleton keeps the map of games and sockets of clients.

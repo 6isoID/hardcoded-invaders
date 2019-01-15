@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: 'jdbc:postgresql://epruizhw0388:5432/hardinv'
+    username: HIapp
+    password: hardcoded2014
+
+  security:
+    user:
+      password: 123
+
+  cache:
+    cache-names: settings
+    caffeine:
+      spec: expireAfterAccess=5s

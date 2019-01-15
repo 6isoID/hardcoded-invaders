@@ -5,7 +5,6 @@ import com.epam.game.constants.GameType;
 import com.epam.game.gamemodel.model.UserScore;
 
 import java.sql.Timestamp;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -18,13 +17,13 @@ public class Game {
 
 	private long            gameId;
 	private String          title;
-	private GameType        type;
+	private GameType type;
 	private String          description;
 	private long            winnerId;
 	private long            creatorId;
 	private long            numberOfTurns;
 	private String          logPath;
-	private GameState       state;
+	private GameState state;
 	private Timestamp       timeCreated;
 	private List<UserScore> statistics;
 

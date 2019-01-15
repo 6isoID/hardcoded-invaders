@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<form:form commandName="createTrainingLevelForm" method="POST" cssClass="abys-branded bot-decorated" id="training-form">
+<form:form modelAttribute="createTrainingLevelForm" method="POST" cssClass="abys-branded bot-decorated" id="training-form">
 		<div class="form-row">
 			<label><spring:message code="label.trainingLevel.botsCount"/>:</label>
 			<form:select path="botsCount">

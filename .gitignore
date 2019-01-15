@@ -1,5 +1,26 @@
-target/
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
 
-.idea/
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
 *.iml
-/src/main/webapp/META-INF/context.xml
+*.ipr
+/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/

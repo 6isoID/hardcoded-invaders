@@ -1,15 +1,14 @@
 package com.epam.game.gameinfrastructure.parser;
 
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-
+import com.epam.game.gamemodel.model.action.Action;
+import com.epam.game.gamemodel.model.action.impl.MoveAction;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.epam.game.gamemodel.model.action.Action;
-import com.epam.game.gamemodel.model.action.impl.MoveAction;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 /**
  * Not used

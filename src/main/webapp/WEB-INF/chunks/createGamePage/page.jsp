@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<form:form commandName="createGameForm" method="POST" cssClass="abys-branded bot-decorated" id="starting-form">
+<form:form modelAttribute="createGameForm" method="POST" cssClass="abys-branded bot-decorated" id="starting-form">
 		<div class="form-row">
 			<h2>Создание турнира</h2>
 		</div>

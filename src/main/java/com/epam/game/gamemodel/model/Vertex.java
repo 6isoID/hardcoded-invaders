@@ -1,13 +1,13 @@
 package com.epam.game.gamemodel.model;
 
+import com.epam.game.domain.User;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.epam.game.domain.User;
 
 /**
  * Represents a vertex on a game field.

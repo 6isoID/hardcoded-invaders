@@ -2,7 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<c:set var="isCreator" value="${client.canControlGame(gameInfo.gameStatistics)}" />
+<c:set var="isCreator" value="${pageContext.request.userPrincipal.principal.canControlGame(gameInfo.gameStatistics)}" />
 <script type="text/javascript">
     var gameId = ${gameInfo.gameObject.id};
 </script>

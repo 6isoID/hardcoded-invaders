@@ -1,8 +1,8 @@
 package com.epam.game.gameinfrastructure.requessthandling;
 
-import java.net.Socket;
-
 import com.epam.game.domain.User;
+
+import java.net.Socket;
 
 /**
  * 
