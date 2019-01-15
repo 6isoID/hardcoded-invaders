@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 /**
  * @author Igor_Petrov@epam.com
@@ -50,6 +51,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                         .usernameParameter("userName")
                         .passwordParameter("password")
                         .loginProcessingUrl("/login.html")
+                        .successHandler(new SimpleUrlAuthenticationSuccessHandler("/" + ViewsEnum.DOCUMENTATION + ViewsEnum.EXTENSION))
                         .failureHandler(new ExceptionMappingAuthenticationFailureHandler() {
                             
                         })
