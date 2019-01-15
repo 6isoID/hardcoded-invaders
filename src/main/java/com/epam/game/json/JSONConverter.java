@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.List;
 
 /**
@@ -152,7 +152,7 @@ public class JSONConverter {
 
     public JSONObject generateNextGameTimeMessage() {
         JSONObject result = new JSONObject();
-        result.put("NextGameTime", gameDAO.getSettings().getNextGame().toEpochSecond(ZoneOffset.of("UTC")) * 1000);
+        result.put("NextGameTime", gameDAO.getSettings().getNextGame().atZone(ZoneId.systemDefault()).toEpochSecond() * 1000);
         return result;
     }
 }
