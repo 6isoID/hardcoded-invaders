@@ -111,7 +111,10 @@ public class GameDAO {
 		NEXT_GAME_TIME(v -> LocalDateTime.parse(v, DateTimeFormatter.ISO_DATE_TIME)),
 		ERROR_RESPONSE_DELAY(Long::valueOf),
 		STAT_ROWS_TO_SHOW(Integer::valueOf),
-		REGISTRATION_IS_OPEN(Boolean::valueOf);
+		REGISTRATION_IS_OPEN(Boolean::valueOf),
+		MINIMAL_PLAYERS_NUMBER(Integer::valueOf),
+		MAXIMAL_PLAYERS_NUMBER(Integer::valueOf),
+		GAME_TURNS_LIMIT(Long::valueOf);
 
 
 		@Getter
@@ -144,6 +147,9 @@ public class GameDAO {
 					.errorDelayMs((Long) settings.get(SettingsOption.ERROR_RESPONSE_DELAY))
 					.startRowsToShow((Integer) settings.get(SettingsOption.STAT_ROWS_TO_SHOW))
 					.registrationOpened((Boolean) settings.get(SettingsOption.REGISTRATION_IS_OPEN))
+					.minPlayers((Integer) settings.get(SettingsOption.MINIMAL_PLAYERS_NUMBER))
+					.maxPlayers((Integer) settings.get(SettingsOption.MAXIMAL_PLAYERS_NUMBER))
+					.roundTurns((Long) settings.get(SettingsOption.GAME_TURNS_LIMIT))
 					.build();
 		}
 	};
