@@ -1,16 +1,14 @@
 package com.epam.game.controller.validators;
 
+import com.epam.game.controller.forms.LoginForm;
+import com.epam.game.dao.UserDAO;
+import com.epam.game.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.epam.game.controller.forms.LoginForm;
-import com.epam.game.domain.User;
-import com.epam.game.model.dao.UserDAO;
-
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

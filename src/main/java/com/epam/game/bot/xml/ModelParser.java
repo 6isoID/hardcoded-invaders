@@ -1,18 +1,17 @@
 package com.epam.game.bot.xml;
 
+import com.epam.game.bot.domain.Planet;
+import com.epam.game.bot.domain.PlanetType;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import com.epam.game.bot.domain.Planet;
-import com.epam.game.bot.domain.PlanetType;
 
 /**
  * Parser implementation.

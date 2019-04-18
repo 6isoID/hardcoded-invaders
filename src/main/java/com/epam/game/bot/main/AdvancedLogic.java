@@ -1,13 +1,13 @@
 package com.epam.game.bot.main;
 
+import com.epam.game.bot.domain.Behaviors;
+import com.epam.game.bot.domain.BotAction;
+import com.epam.game.bot.domain.Planet;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import com.epam.game.bot.domain.Behaviors;
-import com.epam.game.bot.domain.BotAction;
-import com.epam.game.bot.domain.Planet;
 
 /**
  * Advanced implementation of bot's logic. Not finished yet.

@@ -1,9 +1,8 @@
 package com.epam.game.filters;
 
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import java.io.UnsupportedEncodingException;
 
 public final class EncodingRequestWrapper extends HttpServletRequestWrapper {
     public EncodingRequestWrapper(HttpServletRequest servletRequest) {

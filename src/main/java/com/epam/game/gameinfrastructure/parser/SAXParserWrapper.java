@@ -1,17 +1,16 @@
 package com.epam.game.gameinfrastructure.parser;
 
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.SAXException;
-
-public class SAXParserWrapper implements ClientRequestParser{
+public class SAXParserWrapper implements ClientRequestParser {
 
     @Override
     public List<ClientsDataObject> parse(String str) throws SAXException, IOException {

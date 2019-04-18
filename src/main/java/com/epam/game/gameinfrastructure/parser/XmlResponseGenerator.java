@@ -1,15 +1,13 @@
 package com.epam.game.gameinfrastructure.parser;
 
-import java.util.Map;
+import com.epam.game.gamemodel.model.Vertex;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import com.epam.game.gamemodel.model.Vertex;
+import java.util.Map;
 
 /**
  * generate xml-document from map of vertices

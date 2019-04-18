@@ -1,10 +1,10 @@
 package com.epam.game.bot.main;
 
-import java.util.List;
-import java.util.Map;
-
 import com.epam.game.bot.domain.BotAction;
 import com.epam.game.bot.domain.Planet;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for player's logic.

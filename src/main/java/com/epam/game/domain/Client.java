@@ -1,7 +1,5 @@
 package com.epam.game.domain;
 
-import com.epam.game.gamemodel.model.GameInstance;
-
 import java.util.List;
 
 /**

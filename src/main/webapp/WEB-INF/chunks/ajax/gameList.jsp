@@ -2,7 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<c:set value='${client.hasAnyRole("ROLE_ADMIN")}' var="isAdmin" />
+<c:set value='${pageContext.request.userPrincipal.principal.hasAnyRole("ROLE_ADMIN")}' var="isAdmin" />
 
 <c:choose>
     <c:when test="${empty games}">

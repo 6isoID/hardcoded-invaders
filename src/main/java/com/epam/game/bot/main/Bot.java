@@ -1,10 +1,5 @@
 package com.epam.game.bot.main;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-
 import com.epam.game.bot.domain.BotAction;
 import com.epam.game.bot.domain.Planet;
 import com.epam.game.bot.domain.PlanetType;
@@ -15,6 +10,10 @@ import com.epam.game.gamemodel.model.Vertex;
 import com.epam.game.gamemodel.model.VertexType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Some kind of adapter for using bot's logic implementation on the server side.

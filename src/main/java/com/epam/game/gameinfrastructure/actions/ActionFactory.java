@@ -1,8 +1,5 @@
 package com.epam.game.gameinfrastructure.actions;
 
-import java.net.Socket;
-import java.util.List;
-
 import com.epam.game.domain.User;
 import com.epam.game.exceptions.GameIsFinishedException;
 import com.epam.game.exceptions.NoSuchGameException;
@@ -15,6 +12,9 @@ import com.epam.game.gamemodel.model.action.Action;
 import com.epam.game.gamemodel.model.action.ActionsType;
 import com.epam.game.gamemodel.model.action.impl.LoginAction;
 import com.epam.game.gamemodel.model.action.impl.MoveAction;
+
+import java.net.Socket;
+import java.util.List;
 
 /**
  * Factory produces Actions

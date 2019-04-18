@@ -4,8 +4,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <c:choose>
-    <c:when test="${Settings.REGISTRATION_IS_OPEN}">
-        <form:form commandName="signUpForm" action="signUp.html" method="POST" id="registration-form" class="abys-branded" onsubmit="return validateData();">
+    <c:when test="${registrationIsOpen}">
+        <form:form modelAttribute="signUpForm" action="signUp.html" method="POST" id="registration-form" class="abys-branded" onsubmit="return validateData();">
             <div class="form-row">
                 <label><spring:message code="label.signUp.userName"/>:</label>
                 <form:input maxlength="30" path="name" />

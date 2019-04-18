@@ -1,6 +1,18 @@
 package com.epam.game.controller;
 
+import com.epam.game.constants.AttributesEnum;
+import com.epam.game.constants.ViewsEnum;
+import com.epam.game.controller.forms.ProfileForm;
+import com.epam.game.controller.validators.ProfileValidator;
+import com.epam.game.dao.GameDAO;
+import com.epam.game.dao.UserDAO;
+import com.epam.game.domain.User;
+import com.epam.game.gamemodel.model.GameInstance;
+import com.epam.game.gamemodel.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -8,18 +20,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
-import com.epam.game.authorization.TokenGenerator;
-import com.epam.game.constants.AttributesEnum;
-import com.epam.game.constants.ViewsEnum;
-import com.epam.game.controller.forms.ProfileForm;
-import com.epam.game.controller.validators.ProfileValidator;
-import com.epam.game.domain.Client;
-import com.epam.game.domain.User;
-import com.epam.game.gamemodel.model.GameInstance;
-import com.epam.game.gamemodel.model.Model;
-import com.epam.game.model.dao.GameDAO;
-import com.epam.game.model.dao.UserDAO;
 
 /**
  * Controller for working with profile page.
@@ -37,11 +37,16 @@ public class ProfileController {
     private GameDAO gameDAO;
     @Autowired
     private ProfileValidator profileValidator;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    @Lazy
+    private Model gameModel;
 
     @RequestMapping(value = "/" + ViewsEnum.PROFILE + ViewsEnum.EXTENSION, method = RequestMethod.GET)
-    public String showProfileForm(@ModelAttribute Client client, ModelMap model) {
+    public String showProfileForm(@AuthenticationPrincipal User user, ModelMap model) {
         ProfileForm profileForm = (ProfileForm)model.get(AttributesEnum.PROFILE_FORM);
-        User user = userDAO.getUserWith(client.getId());
         if(profileForm == null){
             profileForm = new ProfileForm();
             profileForm.setUserName(user.getUserName());
@@ -56,15 +61,15 @@ public class ProfileController {
     }
 
     @RequestMapping(value = "/" + ViewsEnum.PROFILE + ViewsEnum.EXTENSION, method = RequestMethod.POST)
-    public String saveProfileForm(@ModelAttribute Client client, ModelMap model,
-            @ModelAttribute ProfileForm profileForm, BindingResult result) {
+    public String saveProfileForm(@AuthenticationPrincipal User client, ModelMap model,
+                                  @ModelAttribute ProfileForm profileForm, BindingResult result) {
         this.profileValidator.validate(profileForm, result);
         User user = userDAO.getUserWith(client.getId());
         if(!profileForm.getNewPassword().isEmpty() || !profileForm.getOldPassword().isEmpty()){
-            if(!profileForm.getOldPassword().equals(user.getPassword())){
+            if(!passwordEncoder.matches(profileForm.getOldPassword(),user.getPassword())) {
                 result.rejectValue("oldPassword", "oldPassword.incorrect.profileForm.oldPassword");
             } else {
-                user.setPassword(profileForm.getNewPassword());
+                user.setPassword(passwordEncoder.encode(profileForm.getNewPassword()));
             }
         }
         if (result.hasErrors()) {
@@ -81,13 +86,12 @@ public class ProfileController {
 
     @RequestMapping(value = "/" + ViewsEnum.GENERATE_TOKEN
             + ViewsEnum.EXTENSION, method = RequestMethod.GET)
-    public String generateNewToken(@ModelAttribute Client client, ModelMap model) {
-        Model gameModel = Model.getInstance();
+    public String generateNewToken(@AuthenticationPrincipal User client, ModelMap model) {
         GameInstance game = gameModel.getByUser(client.getId());
         if (game == null) {
             User user = userDAO.getUserWith(client.getId());
-            user.setToken(TokenGenerator.generate());
-            userDAO.updateUser(user);
+            String token = userDAO.updateToken(user.getId());
+            client.setToken(token);
             return "redirect:" + ViewsEnum.PROFILE + ViewsEnum.EXTENSION;
         } else {
             model.addAttribute(AttributesEnum.ERROR_TOKEN,

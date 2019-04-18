@@ -1,9 +1,9 @@
 package com.epam.game.gameinfrastructure.parser;
 
+import com.epam.game.gamemodel.model.action.ActionsType;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.epam.game.gamemodel.model.action.ActionsType;
 
 /**
  * Wrapper for data from request
@@ -15,7 +15,7 @@ public class ClientsDataObject {
     
     private ActionsType type;
     
-    private Map<RequestXMLTag, String> params;    
+    private Map<RequestXMLTag, String> params;
 
     public ClientsDataObject() {
         params = new HashMap<RequestXMLTag, String>();

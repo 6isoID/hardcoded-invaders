@@ -1,27 +1,19 @@
 package com.epam.game.bot.main;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import com.epam.game.bot.domain.BotAction;
+import com.epam.game.bot.domain.Planet;
+import com.epam.game.bot.xml.ModelParser;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.CharBuffer;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.SAXException;
-
-import com.epam.game.bot.domain.BotAction;
-import com.epam.game.bot.domain.Planet;
-import com.epam.game.bot.xml.ModelParser;
 
 /**
  * Runnable implementation that operates connections to the game server.

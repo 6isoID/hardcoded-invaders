@@ -1,9 +1,9 @@
 package com.epam.game.gameinfrastructure.parser;
 
+import org.xml.sax.SAXException;
+
 import java.io.IOException;
 import java.util.List;
-
-import org.xml.sax.SAXException;
 
 
 /**

@@ -2,8 +2,6 @@ package com.epam.game.domain;
 
 import com.epam.game.constants.GameType;
 
-import java.util.List;
-
 /**
  * Created by Sergey_Fedorov.
  */

@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<form:form commandName="profileForm" action="profile.html"
+<form:form modelAttribute="profileForm" action="profile.html"
 		method="POST" onsubmit="return validateData()" id="profile-form" cssClass="abys-branded bot-decorated">
 		<h3><spring:message code="label.profile.profile"/></h3>
 		<div class="form-row">
