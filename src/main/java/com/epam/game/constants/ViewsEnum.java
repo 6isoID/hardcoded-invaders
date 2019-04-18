@@ -24,6 +24,7 @@ public final class ViewsEnum {
     /* new views */
     public static final String INFO_PAGE = "info";
     public static final String SETTINGS = "settings";
+    public static final String ADMIN = "admin";
     public static final String BATTLE = "battle";
     public static final String NO_COOKIE = "noCookie";
 
@@ -38,20 +39,7 @@ public final class ViewsEnum {
 
     public static final String CRAWLER_VERIFY_PAGE = "b6114a316be6";
 
+    public static final String WEBSOCKET_SERVER_URI = "/galaxy";
 
     public static final String EXTENSION = ".html";
-
-    public static final String[] PUBLIC_PAGES = {LOGIN, SIGN_UP, SETTINGS, LOGOUT, NO_COOKIE, INFO_PAGE, CRAWLER_VERIFY_PAGE};
-
-    public static boolean isPublicPage(String page) {
-        for (String publicPage : PUBLIC_PAGES) {
-            if((publicPage + EXTENSION).equals(page)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private ViewsEnum() {
-    }
 }

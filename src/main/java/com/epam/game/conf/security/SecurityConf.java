@@ -6,12 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 /**
@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
  * Created at 1/14/2019
  */
 @Configuration
+@EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -43,8 +44,13 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers("/" + ViewsEnum.SIGN_UP + ViewsEnum.EXTENSION)
                         .permitAll()
+                    .antMatchers("/" + ViewsEnum.INFO_PAGE + ViewsEnum.EXTENSION)
+                        .permitAll()
+                    .antMatchers(ViewsEnum.WEBSOCKET_SERVER_URI)
+                        .permitAll()
                     .anyRequest().authenticated()
                 .and()
+                .csrf().disable() // TODO: for testing purposes only -> extract to separate spring profile
 
                 .formLogin()
                     .loginPage("/" + ViewsEnum.LOGIN + ViewsEnum.EXTENSION)
@@ -52,9 +58,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                         .passwordParameter("password")
                         .loginProcessingUrl("/login.html")
                         .successHandler(new SimpleUrlAuthenticationSuccessHandler("/" + ViewsEnum.DOCUMENTATION + ViewsEnum.EXTENSION))
-                        .failureHandler(new ExceptionMappingAuthenticationFailureHandler() {
-                            
-                        })
                     .permitAll()
                 .and()
                     .logout()
