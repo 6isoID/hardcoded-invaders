@@ -1,16 +1,19 @@
 package com.epam.game.conf;
 
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+
+import javax.sql.DataSource;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.sql.DataSource;
+import org.springframework.core.annotation.Order;
 
 /**
  * @author Igor_Petrov@epam.com
  * Created at 1/28/2019
  */
 @Configuration
+@Order(HIGHEST_PRECEDENCE)
 public class DBConf {
 
     @Bean

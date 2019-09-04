@@ -2,7 +2,6 @@ package com.epam.game.conf;
 
 import com.epam.game.gamemodel.model.Model;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.DependsOn;
 public class GameModelConf {
 
     @Bean
-    @Lazy
+    @DependsOn("liquibase")
     public Model modelInstance() {
         return new Model();
     }
