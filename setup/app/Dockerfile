@@ -1,4 +1,4 @@
-FROM gradle:jdk8-alpine as BUILD
+FROM gradle:jdk18-alpine as BUILD
 ENV APP_HOME=/home/gradle
 WORKDIR $APP_HOME
 RUN rm -rf $APP_HOME/src || return 0

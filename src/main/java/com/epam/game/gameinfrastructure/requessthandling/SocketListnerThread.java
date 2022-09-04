@@ -4,6 +4,7 @@ import com.epam.game.constants.Settings;
 import com.epam.game.gameinfrastructure.parser.ClientRequestParser;
 import com.epam.game.gameinfrastructure.parser.SAXParserWrapper;
 import com.epam.game.gamemodel.model.Model;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -19,6 +20,7 @@ import java.util.concurrent.Executors;
  * 
  */
 
+@Slf4j
 public class SocketListnerThread implements Runnable {
 
 
@@ -28,20 +30,24 @@ public class SocketListnerThread implements Runnable {
 
     private ClientRequestParser parser;
 
-    private long readTimeoutMs;
+    private final long readTimeoutMs;
+
+    private final int webSocketPort;
 
     protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
     
     private boolean alive = true;
 
-    public SocketListnerThread(Model model, long readTimeoutMs) {
+    public SocketListnerThread(Model model, long readTimeoutMs, int webSocketPort) {
         this.model = model;
         this.readTimeoutMs = readTimeoutMs;
+        this.webSocketPort = webSocketPort;
     }
 
     public void run() {
         try {
-            serverSocket = new ServerSocket(Settings.PORT);
+            log.info("Exposing server socket listener on port: " + webSocketPort);
+            serverSocket = new ServerSocket(webSocketPort);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

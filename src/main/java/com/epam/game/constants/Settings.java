@@ -9,6 +9,5 @@ public class Settings {
 
     public static final int MAXIMAL_TITLE_LENGTH = 200;
 
-	public static final int STAT_ROWS_TO_SHOW = 30;
-    public static final int PORT = 8080;
+	  public static final int STAT_ROWS_TO_SHOW = 30;
 }

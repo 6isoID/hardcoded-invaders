@@ -1,5 +1,6 @@
 package com.epam.game.controller;
 
+import com.epam.game.conf.WebSocketProperties;
 import com.epam.game.dao.GameDAO;
 import com.epam.game.gameinfrastructure.requessthandling.SocketListnerThread;
 import com.epam.game.gamemodel.model.Model;
@@ -22,11 +23,12 @@ public class SocketServlet {
 
     private final GameDAO gameDAO;
     private final Model model;
+    private final WebSocketProperties webSocketProperties;
 
     @PostConstruct
     public void init()  {
         long clientTimeout = gameDAO.getSettings().getClientTimeoutMs();
-        listenerThread = new SocketListnerThread(model,clientTimeout);
+        listenerThread = new SocketListnerThread(model,clientTimeout, webSocketProperties.getPort());
         new Thread(listenerThread).start();
     }
 

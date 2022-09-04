@@ -29,3 +29,4 @@ spring:
 websocket:
   maxTextMessageBufferSize: 55000
   maxBinaryMessageBufferSize: 55000
+  port: 8081
