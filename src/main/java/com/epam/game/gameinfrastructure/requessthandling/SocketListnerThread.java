@@ -3,6 +3,7 @@ package com.epam.game.gameinfrastructure.requessthandling;
 import com.epam.game.constants.Settings;
 import com.epam.game.gameinfrastructure.parser.ClientRequestParser;
 import com.epam.game.gameinfrastructure.parser.SAXParserWrapper;
+import com.epam.game.gamemodel.model.Model;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -23,6 +24,8 @@ public class SocketListnerThread implements Runnable {
 
     private ServerSocket serverSocket;
 
+    private Model model;
+
     private ClientRequestParser parser;
 
     private long readTimeoutMs;
@@ -31,7 +34,8 @@ public class SocketListnerThread implements Runnable {
     
     private boolean alive = true;
 
-    public SocketListnerThread(long readTimeoutMs) {
+    public SocketListnerThread(Model model, long readTimeoutMs) {
+        this.model = model;
         this.readTimeoutMs = readTimeoutMs;
     }
 
@@ -46,7 +50,7 @@ public class SocketListnerThread implements Runnable {
             try {
                 Socket socket = serverSocket.accept();
                 parser = new SAXParserWrapper();
-                this.threadPool.execute(new ClientRequestHandlerThread(socket,
+                this.threadPool.execute(new ClientRequestHandlerThread(socket, model,
                         parser, readTimeoutMs));
             } catch (IOException e) {
                 // TODO Auto-generated catch block

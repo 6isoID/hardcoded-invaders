@@ -11,6 +11,7 @@ import com.epam.game.gameinfrastructure.parser.RequestXMLTag;
 import com.epam.game.gamemodel.model.GameInstance;
 import com.epam.game.gamemodel.model.Model;
 import com.epam.game.gamemodel.model.action.Action;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,7 @@ import java.util.logging.Logger;
 public class ClientRequestHandlerThread implements Runnable {
 
     private static final Logger log = Logger.getLogger(ClientRequestHandlerThread.class.getName());
-
+    private final Model model;
     private Socket socket;
     private InputStream inputSocketStream;
     private ClientRequestParser parser;
@@ -41,8 +42,9 @@ public class ClientRequestHandlerThread implements Runnable {
      * @param parser
      *            - Parser of request
      */
-    public ClientRequestHandlerThread(Socket socket, ClientRequestParser parser, long readTimeoutMs) {
+    public ClientRequestHandlerThread(Socket socket, Model model, ClientRequestParser parser, long readTimeoutMs) {
         this.socket = socket;
+        this.model = model;
         try {
             this.inputSocketStream = socket.getInputStream();
             this.parser = parser;
@@ -67,11 +69,11 @@ public class ClientRequestHandlerThread implements Runnable {
             try{
                 dataObjectList = parser.parse(request);
                 for (ClientsDataObject dataObject : dataObjectList) {
-                    Action action = ActionFactory.getInstance(dataObject, socket);
+                    Action action = ActionFactory.getInstance(dataObject, model, socket);
                     action.doAction();
                     if(gameToCommand == null || pc == null){
                         String token = dataObject.getParams().get(RequestXMLTag.TOKEN);
-                        gameToCommand = Model.getInstance().getByToken(token);
+                        gameToCommand = model.getByToken(token);
                         pc = action.getPeerController();
                     }
                 }
@@ -133,7 +135,7 @@ public class ClientRequestHandlerThread implements Runnable {
         try{
             Thread.sleep(Settings.ERROR_RESPONSE_DELAY);
             String typeAttr = (type.isEmpty()) ? "" : "type=\"" + type + "\"";
-            SocketResponseSender.getInstance().sendMessage(socket,
+            SocketResponseSender.getInstance().sendMessage((WebSocketSession) socket,
                 String.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?><response><planets /><errors><error %s>%s</error></errors></response>", typeAttr, msg));
             socket.close();
         } catch(Exception e) {

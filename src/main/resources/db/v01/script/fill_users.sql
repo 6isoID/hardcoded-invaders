@@ -185,7 +185,7 @@ INSERT INTO  AUTHORITIES ( USER_ID ,  AUTHORITY ) VALUES ((SELECT u. ID  FROM  U
 
 INSERT INTO  USERS (  USER_NAME ,  LOGIN ,  PASSWORD ,  BOT_NAME ,  PHONE ,
              TOKEN ,  EMAIL )
-    VALUES ('admin', 'admin', '$2a$10$GAk2B9I6e.qUQRgdm3CoWe9/nyK3gmF388m2IJI3FJ958NtvbdTVC', 'admin', '999999999',
+    VALUES ('admin', 'admin', '$2a$12$qVN9ulCLFvHmYVlTgmj4pu7cPk9MQjWZpIwkd9qDbHZ9zirjXh/uK', 'admin', '999999999',
             'nyannyannyannyannyannyannyannyan', 'asdf@asdf.com');
 INSERT INTO  AUTHORITIES ( USER_ID ,  AUTHORITY )
     VALUES ((SELECT u. ID  FROM  USERS  u WHERE u. LOGIN ='admin'), 'ROLE_ADMIN');

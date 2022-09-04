@@ -217,7 +217,7 @@ public class GameDAO {
     }
 
 	@Cacheable(SETTINGS_CACHE_KEY)
-    public GameSettings getSettings() {
+	public GameSettings getSettings() {
 		return jdbcTemplate.queryForObject("select ID, VAL from SETTINGS", settingsMapper);
 	}
 

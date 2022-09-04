@@ -11,6 +11,7 @@ import com.epam.game.gamemodel.map.GalaxyFactory;
 import com.epam.game.gamemodel.model.events.GameAbandonedListener;
 import com.epam.game.gamemodel.model.events.GameFinishedListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -25,19 +26,23 @@ import java.util.stream.Collectors;
  * @author Evgeny_Tetuhin
  * 
  */
-@Resource
+@Component
 public class Model {
 
     private Map<Long, GameInstance> games = new ConcurrentHashMap<>();
     private Map<Long, GameInstance> gamesHistory = new ConcurrentHashMap<>();
+
     @Autowired
     private GameDAO gameDAO;
+
     @Autowired
     private UserDAO userDAO;
 
+    private boolean statsPreLoaded = false;
+
     @PostConstruct
     public void init() {
-        loadPreviousGames();
+//        loadPreviousGames();
     }
 
     private void loadPreviousGames() {

@@ -1,20 +1,22 @@
 buildscript {
     ext {
-        springBootVersion = '2.1.1.RELEASE'
-        lombokVersion = '1.16.20'
+        springBootVersion = '2.7.3'
+        lombokVersion = '1.18.24'
     }
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('com.bmuschko:gradle-docker-plugin:4.3.0')
+        classpath('com.bmuschko:gradle-docker-plugin:8.0.0')
     }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.7.1'
 }
 
 apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.bmuschko.docker-spring-boot-application'
 
@@ -24,7 +26,6 @@ sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
-    maven { url 'http://repo.spring.io/libs-milestone' }
 }
 
 dependencies {
@@ -40,7 +41,7 @@ dependencies {
     implementation 'com.github.ben-manes.caffeine:caffeine'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'org.apache.tiles:tiles-jsp:3.0.8'
-    compile group: 'javax.servlet', name: 'jstl', version: '1.2'
+//    implementation group: 'javax.servlet', name: 'jstl', version: '1.2'
     implementation 'org.apache.tiles:tiles-core:3.0.8'
     implementation 'org.apache.tiles:tiles-servlet:3.0.8'
     implementation 'org.apache.tiles:tiles-request-api:1.0.6'
@@ -51,7 +52,7 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 //    compile 'org.springframework.security:spring-security-config'
-    compile 'org.postgresql:postgresql'
+    implementation 'org.postgresql:postgresql'
 
 
     runtimeOnly 'org.postgresql:postgresql'
@@ -63,7 +64,7 @@ docker {
     springBootApplication {
         baseImage = 'openjdk:8-alpine'
         ports = [ 8080 ]
-        tag = "dojo/starmarines:${version}".toString()
+        images = [ "dojo/starmarines:${version}".toString() ]
     }
 }
 
@@ -71,4 +72,8 @@ bootRun {
     if (project.hasProperty('args')) {
         args project.args.split(',')
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:-deprecation,-removal'
 }

@@ -2,11 +2,11 @@ spring:
   datasource:
     port: 5432
     host: localhost
-#    db: hardinv
+    db: hardinv
     driver-class-name: org.postgresql.Driver
     url: 'jdbc:postgresql://${spring.datasource.host}:${spring.datasource.port}/${spring.datasource.db:postgres}'
     username: postgres
-    password: Password25
+    password: postgres
 
   security:
     user:
@@ -21,6 +21,10 @@ spring:
     view:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog-master.xml
 
 websocket:
   maxTextMessageBufferSize: 55000
