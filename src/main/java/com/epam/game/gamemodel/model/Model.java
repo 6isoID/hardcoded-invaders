@@ -1,21 +1,24 @@
 package com.epam.game.gamemodel.model;
 
-import java.util.EventObject;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.epam.game.constants.GameState;
 import com.epam.game.constants.GameType;
+import com.epam.game.dao.GameDAO;
+import com.epam.game.dao.UserDAO;
 import com.epam.game.domain.Game;
 import com.epam.game.domain.User;
-import com.epam.game.gamemodel.mapgenerator.MapGenerator;
+import com.epam.game.gamemodel.map.Galaxy;
+import com.epam.game.gamemodel.map.GalaxyFactory;
 import com.epam.game.gamemodel.model.events.GameAbandonedListener;
 import com.epam.game.gamemodel.model.events.GameFinishedListener;
-import com.epam.game.model.dao.GameDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Stores and maintains all game instances.
@@ -23,24 +26,40 @@ import com.epam.game.model.dao.GameDAO;
  * @author Evgeny_Tetuhin
  * 
  */
-@Resource
+@Component
 public class Model {
 
-    private Map<Long, GameInstance> games;
-    private static volatile Model model = new Model();
-    private GameDAO gameDAO;
-
-    private Model() {
-        games = new HashMap<Long, GameInstance>();
-    }
+    private Map<Long, GameInstance> games = new ConcurrentHashMap<>();
+    private Map<Long, GameInstance> gamesHistory = new ConcurrentHashMap<>();
 
     @Autowired
-    public void setGameDAO(GameDAO gameDAO) {
-        this.gameDAO = gameDAO;
+    private GameDAO gameDAO;
+
+    @Autowired
+    private UserDAO userDAO;
+
+    private boolean statsPreLoaded = false;
+
+    @PostConstruct
+    public void init() {
+//        loadPreviousGames();
     }
-    
-    public static Model getInstance() {
-        return model;
+
+    private void loadPreviousGames() {
+        List<Game> statistics = gameDAO.getStatistics();
+        Map<Long, User> users = new HashMap<>();
+        statistics.sort(Comparator.comparing(Game::getTimeCreated));
+        statistics.forEach(game -> {
+            User creator = users.computeIfAbsent(game.getCreatorId(), userDAO::getUserWith);
+            gamesHistory.put(game.getGameId(), new GameInstance(game.getGameId(), game.getType(), game.getStatistics(), getUsers(game), creator, GalaxyFactory.getDefault()));
+        });
+    }
+
+    private Map<Long, User> getUsers(Game game) {
+        return game.getStatistics()
+                .stream()
+                .map(UserScore::getUser)
+                .collect(Collectors.toMap(User::getId, Function.identity()));
     }
 
     /**
@@ -48,8 +67,16 @@ public class Model {
      *            - game id
      * @return - game instance
      */
-    public GameInstance getGameById(Long id) {
+    public GameInstance getGameById(Long id, boolean includeHistory) {
+        Map<Long, GameInstance> games = new HashMap<>(this.games);
+        if (includeHistory) {
+            games.putAll(gamesHistory);
+        }
         return games.get(id);
+    }
+
+    public GameInstance getGameById(Long id) {
+        return getGameById(id, false);
     }
 
     /**
@@ -86,7 +113,7 @@ public class Model {
      * @return
      */
     public GameInstance createNewGame(long id, GameType gameType, String title, User creator) {
-        GameInstance newGame = new GameInstance(id, gameType, creator);
+        GameInstance newGame = new GameInstance(id, gameType, gameDAO.getSettings(), creator);
         newGame.setTitle(title);
         games.put(newGame.getId(), newGame);
         newGame.addFinishListener(new GameFinishedListener() {
@@ -125,9 +152,9 @@ public class Model {
         return newGame;
     }
     
-    public GameInstance createNewGame(MapGenerator generator, long id, GameType gameType, String title, User creator) {
+    public GameInstance createNewGame(Galaxy generator, long id, GameType gameType, String title, User creator) {
         GameInstance game = createNewGame(id, gameType, title, creator);
-        game.setMapGenerator(generator);
+        game.setGalaxy(generator);
         return game;
     }
 
@@ -166,8 +193,20 @@ public class Model {
         games.remove(id);
     }
 
-    public Map<Long, GameInstance> getAllTournaments() {
-        Map<Long, GameInstance> result = new HashMap<Long, GameInstance>();
+    public Map<Long, GameInstance> getAllTournaments(Long creatorId) {
+        Map<Long, GameInstance> result = new HashMap<>();
+        Map<Long, GameInstance> games = new HashMap<>(this.games);
+
+        if (creatorId != null) {
+            Map<Long, GameInstance> creatorGames = gamesHistory.entrySet()
+                    .stream()
+                    .filter(e -> e.getValue().getCreator().getId().equals(creatorId))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            games.putAll(creatorGames);
+        } else {
+            games.putAll(gamesHistory);
+        }
+
         for (Map.Entry<Long, GameInstance> game : games.entrySet()) {
             if (GameType.PLAYER_TOURNAMENT.equals(game.getValue().getType())
                     || GameType.ADMIN_TOURNAMENT.equals(game.getValue().getType())) {

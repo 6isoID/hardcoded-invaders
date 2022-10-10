@@ -1,10 +1,10 @@
 package com.epam.game.gamemodel.mapgenerator;
 
-import java.util.Map;
-
 import com.epam.game.domain.User;
 import com.epam.game.gamemodel.model.Vertex;
 import com.epam.game.gamemodel.naming.NamingHandler;
+
+import java.util.Map;
 
 /**
  * Interface for generating a game field.

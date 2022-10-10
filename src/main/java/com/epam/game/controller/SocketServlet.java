@@ -1,55 +1,39 @@
 package com.epam.game.controller;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.epam.game.conf.WebSocketProperties;
+import com.epam.game.dao.GameDAO;
 import com.epam.game.gameinfrastructure.requessthandling.SocketListnerThread;
+import com.epam.game.gamemodel.model.Model;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * Servlet implementation class SocketServlet
  */
-public class SocketServlet extends HttpServlet {
+@Configuration
+@DependsOn("liquibase")
+@RequiredArgsConstructor
+public class SocketServlet {
 
-    private static final long serialVersionUID = 1L;
     private SocketListnerThread listenerThread;
-    
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        listenerThread = new SocketListnerThread();
+
+    private final GameDAO gameDAO;
+    private final Model model;
+    private final WebSocketProperties webSocketProperties;
+
+    @PostConstruct
+    public void init()  {
+        long clientTimeout = gameDAO.getSettings().getClientTimeoutMs();
+        listenerThread = new SocketListnerThread(model,clientTimeout, webSocketProperties.getPort());
         new Thread(listenerThread).start();
     }
 
-    @Override
+    @PreDestroy
     public void destroy() {
         listenerThread.stopAndDie();
-        super.destroy();
-    }
-    
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SocketServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     * response)
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     * response)
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
     }
 }

@@ -1,5 +1,8 @@
 package com.epam.game.gamemodel.naming.impl;
 
+import com.epam.game.gamemodel.naming.NamingHandler;
+import org.springframework.core.io.Resource;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -8,10 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.core.io.Resource;
-
-import com.epam.game.gamemodel.naming.NamingHandler;
 
 public class FileRandomNamingHandler implements NamingHandler {
 

@@ -1,11 +1,9 @@
 package com.epam.game.gameinfrastructure.actions;
 
-import java.net.Socket;
-import java.util.List;
-
 import com.epam.game.domain.User;
 import com.epam.game.exceptions.GameIsFinishedException;
 import com.epam.game.exceptions.NoSuchGameException;
+import com.epam.game.gameinfrastructure.commands.client.ClientAction;
 import com.epam.game.gameinfrastructure.parser.ClientsDataObject;
 import com.epam.game.gameinfrastructure.parser.RequestXMLTag;
 import com.epam.game.gameinfrastructure.requessthandling.PeerController;
@@ -15,6 +13,10 @@ import com.epam.game.gamemodel.model.action.Action;
 import com.epam.game.gamemodel.model.action.ActionsType;
 import com.epam.game.gamemodel.model.action.impl.LoginAction;
 import com.epam.game.gamemodel.model.action.impl.MoveAction;
+import org.springframework.web.socket.WebSocketSession;
+
+import java.net.Socket;
+import java.util.List;
 
 /**
  * Factory produces Actions
@@ -24,10 +26,10 @@ import com.epam.game.gamemodel.model.action.impl.MoveAction;
  */
 public class ActionFactory {
 
-    public static Action getInstance(ClientsDataObject dataObject, Socket socket)
+    public static Action getInstance(ClientsDataObject dataObject, Model model, Socket socket)
             throws NoSuchGameException, GameIsFinishedException {
         String token = dataObject.getParams().get(RequestXMLTag.TOKEN);
-        GameInstance game = Model.getInstance().getByToken(token);
+        GameInstance game = model.getByToken(token);
         
         if (game == null) {
             throw new NoSuchGameException(
@@ -39,7 +41,7 @@ public class ActionFactory {
 
         try {
             PeerController pc = new PeerController(game.getUserByToken(token),
-                    socket);
+                    (WebSocketSession) socket);
             if (ActionsType.LOGIN == dataObject.getType()) {
                 return new LoginAction(game, pc);
             } else if (ActionsType.MOVE == dataObject.getType()) {
@@ -51,7 +53,7 @@ public class ActionFactory {
                 long to = Long.parseLong(toStr);
                 int unitscount = Integer.parseInt(unitscountStr);
                 User user = game.getUserByToken(token);
-                return new MoveAction(game, from, to, unitscount, user, pc);
+                return new MoveAction(game, new ClientAction(from, to, unitscount), user, pc);
             }
         } catch (NumberFormatException e) {
             //e.printStackTrace();

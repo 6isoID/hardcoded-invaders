@@ -1,23 +1,24 @@
 package com.epam.game.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.json.simple.JSONObject;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
 import com.epam.game.constants.AttributesEnum;
 import com.epam.game.constants.RequestType;
 import com.epam.game.constants.ViewsEnum;
 import com.epam.game.gamemodel.model.GameInstance;
 import com.epam.game.gamemodel.model.Model;
 import com.epam.game.json.JSONConverter;
+import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +30,14 @@ import java.util.logging.Logger;
  */
 @Controller
 @SessionAttributes(value = AttributesEnum.CLIENT)
+@RequiredArgsConstructor
 public class ViewDataController {
+
+    private final JSONConverter converter;
+
+    @Autowired
+    @Lazy
+    private Model gameModel;
 
     @RequestMapping(value = "/" + ViewsEnum.VIEW_DATA + ViewsEnum.EXTENSION, method = RequestMethod.GET)
     public void getViewData(
@@ -43,20 +51,18 @@ public class ViewDataController {
             return;
         }
         RequestType type = RequestType.valueOf(requestType);
-        GameInstance game = Model.getInstance().getGameById(gameId);
+        GameInstance game = gameModel.getGameById(gameId, true);
         if (game == null) {
             return;
         }
         // Selection of generation type.
-        JSONConverter converter = new JSONConverter();
         JSONObject object = null;
         switch (type) {
         case GAME_FIELD:
             object = converter.generateGameMapMessage(game);
             break;
         case PLAYERS_ACTIONS:
-            object = converter.generatePlayersActionsMessage(
-                    game);
+            object = converter.generatePlayersActionsMessage(game);
             break;
         }
         // Addition of JSON object to response.

@@ -1,13 +1,12 @@
 package com.epam.game.controller.validators;
 
+import com.epam.game.controller.forms.ProfileForm;
+import com.epam.game.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
-import com.epam.game.controller.forms.ProfileForm;
-import com.epam.game.model.dao.UserDAO;
 
 @Service
 public class ProfileValidator implements Validator {
@@ -36,10 +35,8 @@ public class ProfileValidator implements Validator {
                 err.rejectValue("userName", "userName.outOfRange.profileForm.userName", args, null);
             }
         }
-//        if (!form.getPhone().isEmpty() && !CVUtils.isCorrectPhoneNumber(form.getPhone())) {
-//            err.rejectValue("phone", "phone.incorrect.profileForm.phone");
-//        }
-        if (!CVUtils.isGoodEmailPart(form.getEmail()) || form.getEmail().length() > MAX_EMAIL_LENGTH) {
+
+        if (!CVUtils.isEmailValid(form.getEmail()) || form.getEmail().length() > MAX_EMAIL_LENGTH) {
             err.rejectValue("email", "email.invalid.profileForm.email");
         }
         if (!form.getNewPassword().isEmpty() || !form.getOldPassword().isEmpty()) {

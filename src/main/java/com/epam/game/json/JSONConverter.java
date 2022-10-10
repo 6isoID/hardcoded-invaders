@@ -1,15 +1,19 @@
 package com.epam.game.json;
 
-import com.epam.game.constants.Settings;
-import java.util.List;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
+import com.epam.game.dao.GameDAO;
 import com.epam.game.domain.User;
+import com.epam.game.gamemodel.model.Edge;
 import com.epam.game.gamemodel.model.GameInstance;
 import com.epam.game.gamemodel.model.UserScore;
 import com.epam.game.gamemodel.model.Vertex;
+import com.epam.game.gamemodel.model.disaster.Disaster;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.ZoneId;
+import java.util.List;
 
 /**
  * {@code JSONConverter} implements some methods to create JSON representations
@@ -18,7 +22,11 @@ import com.epam.game.gamemodel.model.Vertex;
  * @author Evgeny_Tetuhin
  * 
  */
+@Component
 public class JSONConverter {
+
+    @Autowired
+    private GameDAO gameDAO;
 
     /**
      * Creates a JSONObject representing the game field.
@@ -113,6 +121,31 @@ public class JSONConverter {
             actions.add(change);
         }
 
+        JSONArray disastersArray = new JSONArray();
+        for (Disaster d : game.getDisasters()) {
+            Class<?> disasterTargetType = d.getTarget().getClass();
+            JSONObject disasterObject = new JSONObject();
+            if (disasterTargetType.isAssignableFrom(Vertex.class)) {
+                disasterObject.put("planetId", ((Disaster<Vertex>) d).getTarget().getId());
+            } else if (disasterTargetType.isAssignableFrom(Edge.class)) {
+                Disaster<Edge> disaster = d;
+                disasterObject.put("edgeSourceId", disaster.getTarget().getSource());
+                disasterObject.put("edgeTargetId", disaster.getTarget().getTarget());
+            }
+            disasterObject.put("type", d.getType().name());
+            disastersArray.add(disasterObject);
+        }
+        result.put("disasters", disastersArray);
+
+        JSONArray portalsArray = new JSONArray();
+        for (Edge p : game.getPortals()) {
+            JSONObject portalObject = new JSONObject();
+            portalObject.put("edgeSourceId",p.getSource());
+            portalObject.put("edgeTargetId",p.getTarget());
+            portalsArray.add(portalObject);
+        }
+        result.put("portals",portalsArray);
+
         playersActions.put("actions", actions);
         result.put("playersActions", playersActions);
         String status = (game.isStarted()) ? (game.isFinished() ? "finished" : "started") : "not started";
@@ -135,11 +168,9 @@ public class JSONConverter {
         return result;
     }
 
-
-
     public JSONObject generateTurnDurationMessage() {
         JSONObject result = new JSONObject();
-        result.put("TurnDelay",Settings.GAME_TURN_DELAY);
+        result.put("TurnDelay", gameDAO.getSettings().getTurnDelayMs());
         return result;
 
     }
@@ -148,7 +179,7 @@ public class JSONConverter {
 
     public JSONObject generateNextGameTimeMessage() {
         JSONObject result = new JSONObject();
-        result.put("NextGameTime",Settings.NEXT_GAME_TIME);
+        result.put("NextGameTime", gameDAO.getSettings().getNextGame().atZone(ZoneId.systemDefault()).toEpochSecond() * 1000);
         return result;
     }
 }

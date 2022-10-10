@@ -1,13 +1,12 @@
 package com.epam.game.controller.validators;
 
+import com.epam.game.controller.forms.SignUpForm;
+import com.epam.game.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
-import com.epam.game.controller.forms.SignUpForm;
-import com.epam.game.model.dao.UserDAO;
 
 /**
  * Validator for SignUp form.
@@ -49,7 +48,7 @@ public class SignUpValidator implements Validator {
             }
         }
         if (err.getFieldErrorCount("email") == 0) {
-            if ( !CVUtils.isGoodEmailPart(signUpForm.getEmail()) ) {
+            if ( !CVUtils.isEmailValid(signUpForm.getEmail()) ) {
                 err.rejectValue("email", "email.invalid.signUpForm.email");
             }
         }

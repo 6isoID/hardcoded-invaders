@@ -1,21 +1,17 @@
 package com.epam.game.controller;
 
+import com.epam.game.constants.AttributesEnum;
 import com.epam.game.constants.GameType;
-import com.epam.game.domain.CommonStatistics;
+import com.epam.game.constants.ViewsEnum;
+import com.epam.game.dao.GameDAO;
+import com.epam.game.dao.UserDAO;
+import com.epam.game.domain.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.epam.game.constants.AttributesEnum;
-import com.epam.game.constants.ViewsEnum;
-import com.epam.game.domain.Game;
-import com.epam.game.model.dao.GameDAO;
-import com.epam.game.model.dao.UserDAO;
-
-import java.util.List;
 
 @Controller
 public class StatisticsController {
@@ -29,7 +25,7 @@ public class StatisticsController {
     @RequestMapping(value = "/" + ViewsEnum.GAME_STATISTICS_AJAX
             + ViewsEnum.EXTENSION, method = RequestMethod.GET)
     public String showGameStatistics(ModelMap model,
-            @RequestParam(value = "id", required = false) Long id) {
+                                     @RequestParam(value = "id", required = false) Long id) {
         Game game = gameDao.getById(id);
         model.addAttribute(AttributesEnum.GAME_STATISTICS_AJAX, game);
         model.addAttribute(AttributesEnum.GAME_WINNER, userDao.getUserWith(game.getWinnerId()));

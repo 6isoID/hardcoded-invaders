@@ -1,0 +1,79 @@
+buildscript {
+    ext {
+        springBootVersion = '2.7.3'
+        lombokVersion = '1.18.24'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath('com.bmuschko:gradle-docker-plugin:8.0.0')
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.7.1'
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.bmuschko.docker-spring-boot-application'
+
+group = 'com.epam.game'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+    implementation 'org.springframework.security:spring-security-taglibs'
+
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'org.apache.tiles:tiles-jsp:3.0.8'
+//    implementation group: 'javax.servlet', name: 'jstl', version: '1.2'
+    implementation 'org.apache.tiles:tiles-core:3.0.8'
+    implementation 'org.apache.tiles:tiles-servlet:3.0.8'
+    implementation 'org.apache.tiles:tiles-request-api:1.0.6'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    implementation 'org.liquibase:liquibase-core'
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+//    compile 'org.springframework.security:spring-security-config'
+    implementation 'org.postgresql:postgresql'
+
+
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+
+docker {
+    springBootApplication {
+        baseImage = 'openjdk:8-alpine'
+        ports = [ 8080 ]
+        images = [ "dojo/starmarines:${version}".toString() ]
+    }
+}
+
+bootRun {
+    if (project.hasProperty('args')) {
+        args project.args.split(',')
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:-deprecation,-removal'
+}

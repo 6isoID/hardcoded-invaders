@@ -1,7 +1,5 @@
 package com.epam.game.gamemodel.model.action.impl;
 
-import java.net.Socket;
-
 import com.epam.game.gameinfrastructure.requessthandling.PeerController;
 import com.epam.game.gameinfrastructure.requessthandling.SocketResponseSender;
 import com.epam.game.gamemodel.model.GameInstance;

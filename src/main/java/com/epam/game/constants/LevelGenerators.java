@@ -1,11 +1,11 @@
 package com.epam.game.constants;
 
-import java.util.*;
-
 import com.epam.game.gamemodel.mapgenerator.MapGenerator;
 import com.epam.game.gamemodel.mapgenerator.impl.TriangleMapGenerator;
 import com.epam.game.gamemodel.model.VertexType;
 import com.epam.game.gamemodel.naming.impl.FileRandomNamingHandler;
+
+import java.util.*;
 
 public class LevelGenerators {
     

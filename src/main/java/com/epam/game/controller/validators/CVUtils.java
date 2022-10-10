@@ -1,8 +1,5 @@
 package com.epam.game.controller.validators;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Custom Validation Utils.
  * 
@@ -17,13 +14,5 @@ public class CVUtils {
     
     public static boolean inRange(int num, int min, int max) {
         return num >= min && num <= max;
-    }
-
-    public static boolean isCorrectPhoneNumber(String phone) {
-        return phone.matches("[\\+]{0,1}(\\(?[0-9]\\)?[\\s-]?){5,12}");
-    }
-
-    public static boolean isGoodEmailPart(String email) {
-        return email.matches("[\\w\\._\\d]+") && inRange(email.length(), 4,200);
     }
 }
